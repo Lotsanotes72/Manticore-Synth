@@ -1,0 +1,1918 @@
+{
+"Wyrmglass Cathedral": {
+"master": -6.0,
+"lane1_vol": -3.42
+},
+"Starheart Cloak": {
+"master": -6.0,
+"lane1_vol": -4.07
+},
+"Ironthorn Halo": {
+"master": -6.0,
+"lane1_vol": -5.58
+},
+"Phantom Tapestry": {
+"master": -6.0,
+"lane1_vol": -4.87
+},
+"Gilded Nave": {
+"master": -6.0,
+"lane1_vol": -5.14
+},
+"Aurora of the Fen": {
+"master": -6.0,
+"lane1_vol": -5.72
+},
+"Whispering Fields": {
+"master": -2.45
+},
+"Bastion of Titan": {
+"master": -6.0,
+"lane1_vol": -5.74
+},
+"Thornheart Reverie": {
+"master": -6.0,
+"lane1_vol": -5.04
+},
+"Leech Tapestry": {
+"master": -6.0,
+"lane1_vol": -2.05
+},
+"Shadowwake Firmament": {
+"master": -3.46,
+"lane1_vol": 0.0
+},
+"Stellar Cloak": {
+"master": -6.0,
+"lane1_vol": -3.49
+},
+"Reverie of the Wastes": {
+"master": 3.6
+},
+"Gallows Expanse": {
+"master": -6.0,
+"lane2_vol": -14.29,
+"lane1_vol": -6.29
+},
+"Black Firmament": {
+"master": -6.0,
+"lane2_vol": -13.97,
+"lane1_vol": -5.97
+},
+"Griffin Vigil": {
+"master": -6.0,
+"lane1_vol": -1.56
+},
+"Ravencrest Halo": {
+"master": -6.0,
+"lane1_vol": -7.49
+},
+"Ossuary Mist": {
+"master": -6.0,
+"lane1_vol": -9.15
+},
+"Witchwood Canopy": {
+"master": -6.0,
+"lane1_vol": -3.47
+},
+"Gravglass Shroud": {
+"master": -6.0,
+"lane1_vol": -1.11
+},
+"Fell Nave": {
+"master": -6.0,
+"lane1_vol": -6.78
+},
+"Otherworld Cathedral": {
+"master": -6.0,
+"lane1_vol": -4.35
+},
+"Wispfall Mantle": {
+"master": -6.0,
+"lane1_vol": -4.96
+},
+"Veiled Firmament": {
+"master": -6.0,
+"lane1_vol": -5.3
+},
+"Reverie of the Void": {
+"master": -6.0,
+"lane1_vol": -5.2
+},
+"Wolf Mantle": {
+"master": -6.0,
+"lane1_vol": -3.43
+},
+"Ionwake Dawn": {
+"master": -6.0,
+"lane1_vol": -3.58
+},
+"Mire Cloak": {
+"master": -6.0,
+"lane1_vol": -4.94
+},
+"Rotten Dawn": {
+"master": -6.0,
+"lane1_vol": -5.94
+},
+"Synthetic Expanse": {
+"master": 4.1
+},
+"Solar Expanse": {
+"master": -6.0,
+"lane1_vol": -1.99
+},
+"Cryptwake Bastion": {
+"master": -6.0,
+"lane2_vol": -14.12,
+"lane1_vol": -6.12
+},
+"Halo of Iron Hills": {
+"master": -6.0,
+"lane2_vol": -16.03,
+"lane1_vol": -8.03
+},
+"Briar Haven": {
+"master": -6.0,
+"lane1_vol": -1.82
+},
+"Sorcerer Shroud": {
+"master": -6.0,
+"lane1_vol": -7.28
+},
+"Rune Cathedral": {
+"master": -6.0,
+"lane1_vol": -4.86
+},
+"Satellite Mantle": {
+"master": -6.0,
+"lane1_vol": -5.76
+},
+"Bronze Aurora": {
+"master": -6.0,
+"lane1_vol": -4.66
+},
+"Elven Sanctum": {
+"master": -6.0,
+"lane1_vol": -5.27
+},
+"Warden Dawn": {
+"master": -6.0,
+"lane1_vol": -4.87
+},
+"Shadescar Mantle": {
+"master": -6.0,
+"lane1_vol": -4.77
+},
+"Seance Vigil": {
+"master": -1.47
+},
+"Iron Sanctum": {
+"master": -2.97
+},
+"Colony Haven": {
+"master": -6.0,
+"lane1_vol": -5.38
+},
+"Cloak of Thorns": {
+"master": -6.0,
+"lane1_vol": -5.3
+},
+"Plaguecrest Bastion": {
+"master": -3.98,
+"lane1_vol": 0.0
+},
+"Uncanny Horizon": {
+"master": -6.0,
+"lane1_vol": -7.47
+},
+"Antimatter Veil": {
+"master": -5.74
+},
+"Horizon of the Ninth Moon": {
+"master": 3.65
+},
+"Mythic Firmament": {
+"master": -6.0,
+"lane2_vol": -13.63,
+"lane1_vol": -5.63
+},
+"Silver Canopy": {
+"master": -6.0,
+"lane2_vol": -13.65,
+"lane1_vol": -5.65
+},
+"Apparition Vigil": {
+"master": -6.0,
+"lane1_vol": -1.46
+},
+"Iron Fields": {
+"master": -6.0,
+"lane1_vol": -6.73
+},
+"Ravenmark Dawn": {
+"master": -6.0,
+"lane1_vol": -8.66
+},
+"Cosmic Cathedral": {
+"master": -6.0,
+"lane1_vol": -4.26
+},
+"Vigil of Dust": {
+"master": -6.0,
+"lane1_vol": -4.83
+},
+"Stormfang Shroud": {
+"master": -6.0,
+"lane1_vol": -2.42
+},
+"Grail Fields": {
+"master": -6.0,
+"lane1_vol": -5.59
+},
+"Ashen Glade": {
+"master": -6.0,
+"lane1_vol": -3.52
+},
+"Stag Shroud": {
+"master": -6.0,
+"lane1_vol": -5.1
+},
+"Cryptthorn Orbit": {
+"master": -6.0,
+"lane2_vol": -6.0
+},
+"Sunless Sky": {
+"master": -2.25,
+"lane2_vol": -6.0
+},
+"Synthetic Ruins": {
+"master": -6.0,
+"lane1_vol": -14.24,
+"lane2_vol": -14.24
+},
+"Warden Orbit": {
+"master": -6.0,
+"lane1_vol": -7.67,
+"lane2_vol": -7.67
+},
+"Tundra of the Ninth Moon": {
+"master": -5.14,
+"lane1_vol": 0.0
+},
+"Ember Hollows": {
+"master": -6.0,
+"lane1_vol": -1.28
+},
+"Barrens of Winter": {
+"master": -6.0,
+"lane1_vol": -0.76
+},
+"Depths of Black Water": {
+"master": -6.0,
+"lane1_vol": 0.0
+},
+"Lunar Ruins": {
+"master": -6.0,
+"lane1_vol": -6.45
+},
+"Colony Barrens": {
+"master": -6.0,
+"lane1_vol": -6.6
+},
+"Barrens of Night": {
+"master": -1.92,
+"lane2_vol": -6.0
+},
+"Frost Hollows": {
+"master": -1.9,
+"lane2_vol": -6.0
+},
+"Moonlit Orbit": {
+"master": -6.0,
+"lane1_vol": -15.44,
+"lane2_vol": -15.44
+},
+"Ionfang Abyss": {
+"master": -6.0,
+"lane1_vol": -9.94,
+"lane2_vol": -9.94
+},
+"Banshee Moor": {
+"master": -6.0,
+"lane1_vol": -2.1
+},
+"Shade Ether": {
+"master": -4.37,
+"lane1_vol": 0.0
+},
+"Asylum Depths": {
+"master": -6.0,
+"lane1_vol": -3.27
+},
+"Shadeborn Sky": {
+"master": -6.0,
+"lane1_vol": -1.76
+},
+"Starship Abyss": {
+"master": -6.0,
+"lane1_vol": -6.32
+},
+"Tides of the Moor": {
+"master": -6.0,
+"lane1_vol": -6.69
+},
+"Oakwake Abyss": {
+"master": -5.65,
+"lane2_vol": -6.0
+},
+"Bronze Winds": {
+"master": -0.89,
+"lane2_vol": -6.0
+},
+"Arcgate Fog": {
+"master": -6.0,
+"lane1_vol": -10.43,
+"lane2_vol": -10.43
+},
+"Mech Ether": {
+"master": -6.0,
+"lane1_vol": -10.31,
+"lane2_vol": -10.31
+},
+"Seance Barrens": {
+"master": -3.54,
+"lane1_vol": 0.0
+},
+"Winds of the Tide": {
+"master": -5.72,
+"lane1_vol": 0.0
+},
+"Mire Wilds": {
+"master": -6.0,
+"lane1_vol": -1.16
+},
+"Spectral Fen": {
+"master": -6.0,
+"lane1_vol": 0.0
+},
+"Hexhold Abyss": {
+"master": -6.0,
+"lane1_vol": -6.49
+},
+"Ruins of Sorrow": {
+"master": -6.0,
+"lane1_vol": -8.16
+},
+"Withered Tides": {
+"master": -6.0,
+"lane2_vol": -9.29,
+"lane1_vol": -3.29
+},
+"Hexlight Marsh": {
+"master": -3.14,
+"lane2_vol": -6.0
+},
+"Voidfang Drift": {
+"master": -6.0,
+"lane1_vol": -11.19,
+"lane2_vol": -11.19
+},
+"Binary Tides": {
+"master": -6.0,
+"lane1_vol": -12.34,
+"lane2_vol": -12.34
+},
+"Otherworld Hollows": {
+"master": -6.0,
+"lane1_vol": -3.61
+},
+"Wyrm Vapours": {
+"master": -6.0,
+"lane1_vol": -1.52
+},
+"Apparition Moor": {
+"master": -6.0,
+"lane1_vol": -1.11
+},
+"Night Moor": {
+"master": -6.0,
+"lane1_vol": -1.4
+},
+"Fog of Titan": {
+"master": -6.0,
+"lane1_vol": -8.33
+},
+"Warp Ether": {
+"master": -6.0,
+"lane1_vol": -7.47
+},
+"Wilds of Dust": {
+"master": -2.08,
+"lane2_vol": -6.0
+},
+"Frostshard Shallows": {
+"master": -1.12,
+"lane2_vol": -6.0
+},
+"Hologram Ruins": {
+"master": -6.0,
+"lane1_vol": -6.57,
+"lane2_vol": -6.57
+},
+"Arcfang Winds": {
+"master": -6.0,
+"lane1_vol": -14.75,
+"lane2_vol": -14.75
+},
+"Wyrmforge Hollows": {
+"master": -3.94,
+"lane1_vol": 0.0
+},
+"Wizard Whip": {
+"master": -6.0,
+"lane1_vol": -2.47
+},
+"Comet of the North": {
+"master": -6.0,
+"lane1_vol": -3.79
+},
+"Mech Edge": {
+"master": -6.0,
+"lane1_vol": -3.79
+},
+"Rotborn Blade": {
+"master": -1.76
+},
+"Cryptfang Howl": {
+"master": -2.22
+},
+"Graveforge Lance": {
+"master": -1.47
+},
+"Lance of the Ninth Moon": {
+"master": -6.0,
+"lane1_vol": -3.5
+},
+"Arcbloom Herald": {
+"master": -6.0,
+"lane1_vol": -3.88
+},
+"Interstellar Comet": {
+"master": -6.0,
+"lane1_vol": -2.46
+},
+"Neutron Comet": {
+"master": -5.43
+},
+"Titanium Howl": {
+"master": -5.65
+},
+"Orbital Herald": {
+"master": -6.0
+},
+"Iron Talon": {
+"master": -2.97
+},
+"Orbital Edge": {
+"master": -0.05
+},
+"Fusion Whip": {
+"master": -6.0,
+"lane1_vol": -6.26
+},
+"Seance Scream": {
+"master": -6.0,
+"lane1_vol": -6.28
+},
+"Cryoshroud Blade": {
+"master": -6.0,
+"lane1_vol": -3.53
+},
+"Thornveil Saber": {
+"master": -6.0,
+"lane1_vol": -2.59
+},
+"Siren of Europa": {
+"master": -6.0,
+"lane1_vol": -3.67
+},
+"Herald of the Last Light": {
+"master": -2.92
+},
+"Mireveil Crown": {
+"master": -1.02
+},
+"Mire Blade": {
+"master": 2.73
+},
+"Edge of Kings": {
+"master": -6.0,
+"lane1_vol": -2.07
+},
+"Starborn Herald": {
+"master": -6.0,
+"lane1_vol": -3.07
+},
+"Fang of the Drowned": {
+"master": -6.0,
+"lane1_vol": -3.45
+},
+"Void Edge": {
+"master": -4.67
+},
+"Pulsar Cutlass": {
+"master": 1.89
+},
+"Graviton Arrow": {
+"master": -6.0
+},
+"Basilisk Cry": {
+"master": -6.0,
+"lane1_vol": -1.08
+},
+"Quasar Talon": {
+"master": -6.0,
+"lane1_vol": -1.11
+},
+"Shade Arrow": {
+"master": -6.0,
+"lane1_vol": -6.35
+},
+"Ghost Scream": {
+"master": -6.0,
+"lane1_vol": -7.43
+},
+"Neonscar Comet": {
+"master": -6.0,
+"lane1_vol": -3.27
+},
+"Griffin Whip": {
+"master": -6.0,
+"lane1_vol": -3.46
+},
+"Kingsbane Shriek": {
+"master": -6.0,
+"lane1_vol": -2.29
+},
+"Marrow Cry": {
+"master": -2.86
+},
+"Rotveil Fang": {
+"master": -2.58
+},
+"Feral Wail": {
+"master": -2.39
+},
+"Griffin Fang": {
+"master": -6.0,
+"lane1_vol": -2.57
+},
+"Barrow Cry": {
+"master": -6.0,
+"lane1_vol": -3.7
+},
+"Void Shriek": {
+"master": -6.0,
+"lane1_vol": -3.23
+},
+"Derelict Crown": {
+"master": -5.23
+},
+"Neutron Cutlass": {
+"master": -5.0
+},
+"Novashroud Whip": {
+"master": -6.0,
+"lane1_vol": -0.85
+},
+"Cosmic Cry": {
+"master": -2.95
+},
+"Warden Scream": {
+"master": -6.0,
+"lane1_vol": -1.15
+},
+"Neutron Saber": {
+"master": -6.0,
+"lane1_vol": -6.65
+},
+"Voidwing Spark": {
+"master": -6.0,
+"lane1_vol": -8.61
+},
+"Derelict Siren": {
+"master": -6.0,
+"lane1_vol": -3.04
+},
+"Android Saber": {
+"master": -6.0,
+"lane1_vol": -4.31
+},
+"Fae Cutlass": {
+"master": -6.0,
+"lane1_vol": -2.34
+},
+"Spear of Lost Stars": {
+"master": 0.31
+},
+"Highborn Siren": {
+"master": -1.34
+},
+"Highborn Fang": {
+"master": -1.09
+},
+"Amber Rider": {
+"master": -6.0,
+"lane1_vol": -2.37
+},
+"Gravfang Foundation": {
+"master": -5.53
+},
+"Ember Anvil": {
+"master": -0.88,
+"lane2_vol": -3.0
+},
+"Ashmark Troll": {
+"master": -1.45,
+"lane2_vol": -3.0
+},
+"Tremor of the Ninth Moon": {
+"master": 0.32,
+"lane2_vol": -3.0
+},
+"Colossus of Saturn": {
+"master": -6.0
+},
+"Chrome Ogre": {
+"master": -5.33
+},
+"Cyber Ogre": {
+"master": -6.0,
+"lane1_vol": -4.44
+},
+"Gilded Rampart": {
+"master": -3.41
+},
+"Mech Ogre": {
+"master": -4.2
+},
+"Lamprey Undertow": {
+"master": 0.67
+},
+"Bone Ogre": {
+"master": 0.73
+},
+"Stellar Rampart": {
+"master": -6.0,
+"lane1_vol": -2.07
+},
+"Ozone Leviathan": {
+"master": -5.65
+},
+"Sinister Rumble": {
+"master": -6.0
+},
+"Amber Quake": {
+"master": -4.91
+},
+"Coffin Behemoth": {
+"master": 1.43,
+"lane2_vol": -3.0
+},
+"Abattoir Anvil": {
+"master": -1.07,
+"lane2_vol": -3.0
+},
+"Elder Undertow": {
+"master": 0.93,
+"lane2_vol": -3.0
+},
+"Gravsong Rampart": {
+"master": -5.41
+},
+"Gorge of Saturn": {
+"master": -6.0,
+"lane1_vol": -1.11
+},
+"Thorn Leviathan": {
+"master": -6.0
+},
+"Stellar Mammoth": {
+"master": -6.0,
+"lane1_vol": -3.77
+},
+"Hammer of the Void": {
+"master": -4.38
+},
+"Ashvein Colossus": {
+"master": 0.67
+},
+"Starvein Rampart": {
+"master": 0.42
+},
+"Maw of Ten Towers": {
+"master": -6.0,
+"lane1_vol": -2.07
+},
+"Interstellar Bulwark": {
+"master": -6.0
+},
+"Plague Mammoth": {
+"master": -5.45
+},
+"Maw of the Old Gods": {
+"master": -4.53
+},
+"Hallowed Mammoth": {
+"master": -0.84,
+"lane2_vol": -3.0
+},
+"Starsteel Mammoth": {
+"master": -0.94,
+"lane2_vol": -3.0
+},
+"Rotwood Leviathan": {
+"master": -0.94,
+"lane2_vol": -3.0
+},
+"Android Colossus": {
+"master": -6.0,
+"lane1_vol": -0.35
+},
+"Void Colossus": {
+"master": -6.0
+},
+"Tremor of the Hollow": {
+"master": -6.0
+},
+"Warp Undertow": {
+"master": -6.0,
+"lane1_vol": -5.02
+},
+"Thornshroud Bulwark": {
+"master": -4.92
+},
+"Sunless Juggernaut": {
+"master": 0.4
+},
+"Ashthorn Troll": {
+"master": 0.8
+},
+"Gravity Tremor": {
+"master": -6.0,
+"lane1_vol": -2.07
+},
+"Bedrock of the Hollow": {
+"master": -6.0
+},
+"Ossuary Leviathan": {
+"master": -6.0,
+"lane1_vol": -0.3,
+"lane2_vol": -0.3
+},
+"Android Behemoth": {
+"master": -5.48
+},
+"Mirewing Troll": {
+"master": 1.23,
+"lane2_vol": -3.0
+},
+"Basilisk Titan": {
+"master": -1.2,
+"lane2_vol": -3.0
+},
+"Hearth Troll": {
+"master": -0.19,
+"lane2_vol": -3.0
+},
+"Ozone Bedrock": {
+"master": -5.06
+},
+"Lunar Undertow": {
+"master": -5.17
+},
+"Thorn Behemoth": {
+"master": -6.0,
+"lane1_vol": -2.16
+},
+"Cryo Foundation": {
+"master": -6.0,
+"lane1_vol": -2.85
+},
+"Stag Reliquary": {
+"master": -6.0,
+"lane1_vol": -1.63
+},
+"Fell Hammers": {
+"master": -6.0,
+"lane1_vol": -3.83
+},
+"Fae Music Box": {
+"master": -6.0,
+"lane1_vol": -13.98
+},
+"Moonwing Celesta": {
+"master": -6.0,
+"lane1_vol": -0.99
+},
+"Will-o-Wisp Clocktower": {
+"master": -6.0,
+"lane1_vol": -0.96
+},
+"Otherworld Music Box": {
+"master": -5.44
+},
+"Witching Music Box": {
+"master": -6.0,
+"lane1_vol": -0.29
+},
+"Ashreach Harmonium": {
+"master": -6.0,
+"lane1_vol": -5.42
+},
+"Oakwing Tines": {
+"master": -6.0,
+"lane1_vol": -9.81
+},
+"Pale Clocktower": {
+"master": -6.0,
+"lane1_vol": -9.42
+},
+"Kingsbane Glockenspiel": {
+"master": -6.0,
+"lane1_vol": -14.69
+},
+"Belfry of Sorrow": {
+"master": -6.0,
+"lane1_vol": -11.65
+},
+"Satellite Hammers": {
+"master": -6.0,
+"lane1_vol": -3.86
+},
+"Basilisk Hammers": {
+"master": -6.0,
+"lane1_vol": -3.91
+},
+"Shadeforge Celesta": {
+"master": -6.0,
+"lane1_vol": -15.27
+},
+"Bells of the Abbey": {
+"master": -6.0,
+"lane1_vol": -0.85
+},
+"Haunted Harmonium": {
+"master": -6.0,
+"lane1_vol": -11.03
+},
+"Rotvein Celesta": {
+"master": -6.0,
+"lane1_vol": -0.39
+},
+"Blood Lantern": {
+"master": -5.15
+},
+"Starsteel Orrery": {
+"master": -6.0,
+"lane1_vol": -7.11
+},
+"Warden Music Box": {
+"master": -6.0,
+"lane1_vol": -11.83
+},
+"Stag Hammers": {
+"master": -6.0,
+"lane1_vol": -12.99
+},
+"Wyrmspire Chime": {
+"master": -6.0,
+"lane1_vol": -11.87
+},
+"Thane Relic": {
+"master": -6.0,
+"lane1_vol": -15.75
+},
+"Druid Keys": {
+"master": -6.0,
+"lane1_vol": -3.42
+},
+"Gilded Altar": {
+"master": -6.0,
+"lane1_vol": -2.85
+},
+"Will-o-Wisp Keys": {
+"master": -6.0,
+"lane1_vol": -17.88
+},
+"Ravenforge Celesta": {
+"master": -6.0,
+"lane1_vol": -11.18
+},
+"Chime of the Void": {
+"master": -6.0,
+"lane1_vol": -13.67
+},
+"Ghost Harmonium": {
+"master": -6.0,
+"lane1_vol": -0.31
+},
+"Omenwing Harmonium": {
+"master": -6.0,
+"lane1_vol": -0.25
+},
+"Orrery of the Deep": {
+"master": -6.0,
+"lane1_vol": -5.15
+},
+"Night Ivory": {
+"master": -6.0,
+"lane1_vol": -11.39
+},
+"Ember Clocktower": {
+"master": -6.0,
+"lane1_vol": -11.55
+},
+"Stormvein Carillon": {
+"master": -6.0,
+"lane1_vol": -14.14
+},
+"Oakforge Carillon": {
+"master": -6.0,
+"lane1_vol": -11.61
+},
+"Warp Glockenspiel": {
+"master": -6.0,
+"lane1_vol": -4.79
+},
+"Reliquary of Europa": {
+"master": -6.0,
+"lane1_vol": -2.5
+},
+"Wraith Clocktower": {
+"master": -6.0,
+"lane1_vol": -13.36
+},
+"Bells of the Void": {
+"master": -6.0,
+"lane1_vol": -15.19
+},
+"Frostfang Bells": {
+"master": -6.0,
+"lane1_vol": -11.58
+},
+"Wisphold Lantern": {
+"master": -5.17
+},
+"Relic of Iron Hills": {
+"master": -5.31
+},
+"Thornhold Belfry": {
+"master": -1.43
+},
+"Kingsbane Keys": {
+"master": -6.0,
+"lane1_vol": -11.36
+},
+"Elven Dew": {
+"master": -6.0,
+"lane1_vol": -5.13
+},
+"Ember Lyre": {
+"master": -3.57
+},
+"Thornlight Glint": {
+"master": 0.46
+},
+"Photon Ripple": {
+"master": -6.0,
+"lane1_vol": -0.55
+},
+"Starship Pebble": {
+"master": -4.2
+},
+"Prism of the Last Light": {
+"master": -6.0,
+"lane1_vol": -1.72
+},
+"Cryo Droplet": {
+"master": -6.0,
+"lane1_vol": -2.42
+},
+"Lyre of the North": {
+"master": -6.0,
+"lane1_vol": -0.83
+},
+"Stormfall Thread": {
+"master": -6.0,
+"lane1_vol": -1.13
+},
+"Spiritveil Shard": {
+"master": -4.84
+},
+"Psychic Strings": {
+"master": -4.41
+},
+"Moongate Droplet": {
+"master": 4.06
+},
+"Ravenheart Droplet": {
+"master": 5.18
+},
+"Frosthold Prism": {
+"master": -6.0,
+"lane1_vol": -3.22
+},
+"Kingsbane Ripple": {
+"master": -6.0,
+"lane1_vol": -1.7
+},
+"Quasar Strings": {
+"master": -5.64
+},
+"Chrome Droplet": {
+"master": -6.0,
+"lane1_vol": -3.78
+},
+"Arcgate Ripple": {
+"master": -6.0,
+"lane1_vol": -3.33
+},
+"Storm Quill": {
+"master": -6.0,
+"lane1_vol": -0.64
+},
+"Fell Splinter": {
+"master": -6.0,
+"lane1_vol": -2.02
+},
+"Banshee Zither": {
+"master": -5.36
+},
+"Will-o-Wisp Thread": {
+"master": -2.19
+},
+"Quill of Iron Hills": {
+"master": -5.67
+},
+"Fell Dew": {
+"master": 5.89
+},
+"Starsteel Strings": {
+"master": 3.24
+},
+"Prism of the Rift": {
+"master": -6.0,
+"lane1_vol": -0.83
+},
+"Neon Dew": {
+"master": -5.2
+},
+"Mech Dew": {
+"master": -6.0,
+"lane1_vol": -1.84
+},
+"Lyre of the Void": {
+"master": -6.0,
+"lane1_vol": -3.27
+},
+"Hearth Ripple": {
+"master": -1.28
+},
+"Ironshard Strings": {
+"master": -6.0,
+"lane1_vol": -1.73
+},
+"Glint of the Fen": {
+"master": -2.69
+},
+"Dreadgate Harp": {
+"master": -5.69
+},
+"Frost Lute": {
+"master": 3.26
+},
+"Witchwood Pebble": {
+"master": -6.0,
+"lane1_vol": -3.99
+},
+"Raven Spark": {
+"master": 5.15
+},
+"Silver Lute": {
+"master": -3.25
+},
+"Wizard Splinter": {
+"master": -6.0,
+"lane1_vol": -1.74
+},
+"Orbital Thread": {
+"master": -6.0,
+"lane1_vol": -2.4
+},
+"Prism of the Hollow": {
+"master": -6.0,
+"lane1_vol": -3.41
+},
+"Engine of Sorrow": {
+"master": -0.9
+},
+"Exo Pulse": {
+"master": -3.82
+},
+"Fell Clockwork": {
+"master": -0.08
+},
+"Antimatter Mechanism": {
+"master": -2.48
+},
+"Vector Cipher": {
+"master": -1.43
+},
+"Cryo Run": {
+"master": -6.0,
+"lane1_vol": -5.27
+},
+"Stellar Chase": {
+"master": -6.0,
+"lane1_vol": -3.01
+},
+"Binary Machine": {
+"master": -6.0,
+"lane1_vol": -6.35
+},
+"Chromefang Pulse": {
+"master": -2.33
+},
+"Thane Ritual": {
+"master": -3.28
+},
+"Frostwake Engine": {
+"master": -6.0,
+"lane1_vol": -11.81
+},
+"Labyrinth of Winter": {
+"master": -6.0,
+"lane1_vol": -13.98
+},
+"Void Mechanism": {
+"master": -5.61
+},
+"Clockwork of the North": {
+"master": -5.47
+},
+"Solar Machine": {
+"master": -1.2
+},
+"Wolf Ritual": {
+"master": -6.0,
+"lane1_vol": -1.49
+},
+"Ritual of the Last Light": {
+"master": 1.84
+},
+"Pulsar Sequence": {
+"master": -6.0,
+"lane1_vol": -6.9
+},
+"Grave Pattern": {
+"master": -6.0,
+"lane1_vol": -1.64
+},
+"Vector Gears": {
+"master": -6.0,
+"lane1_vol": -6.4
+},
+"Thane Code": {
+"master": -2.01
+},
+"Machine of Embers": {
+"master": -3.0
+},
+"Ethereal Code": {
+"master": -6.0,
+"lane1_vol": -16.66
+},
+"Mistglass Machine": {
+"master": -6.0,
+"lane1_vol": -12.17
+},
+"Stormreach Cipher": {
+"master": -5.34
+},
+"Ion Pattern": {
+"master": -6.0
+},
+"Lunar Code": {
+"master": -1.72
+},
+"Moonlit Labyrinth": {
+"master": -0.11
+},
+"Code of the Wastes": {
+"master": -6.0,
+"lane1_vol": -5.89
+},
+"Quasar Engine": {
+"master": -4.73
+},
+"Hyper Sequence": {
+"master": -6.0,
+"lane1_vol": -5.13
+},
+"Labyrinth of Glass": {
+"master": -6.0,
+"lane1_vol": -9.79
+},
+"Pulsemark Pattern": {
+"master": -2.87
+},
+"Lunar Loom": {
+"master": -1.82
+},
+"Pattern of Embers": {
+"master": -6.0,
+"lane1_vol": -11.61
+},
+"Banshee Run": {
+"master": -6.0,
+"lane1_vol": -15.63
+},
+"Clockwork of the Forgotten": {
+"master": -3.8
+},
+"Clockwork of the Moor": {
+"master": -3.13
+},
+"Antimatter Gears": {
+"master": -2.2
+},
+"Starforge Circuit": {
+"master": -4.51
+},
+"Run of Black Water": {
+"master": -1.43
+},
+"Run of Iron Hills": {
+"master": 1.72
+},
+"Labyrinth of Saturn": {
+"master": -6.0,
+"lane1_vol": -4.56
+},
+"Mechanism of Thorns": {
+"master": -6.0,
+"lane1_vol": -7.88
+},
+"Titanium Chase": {
+"master": -2.61
+},
+"Oakshroud Section": {
+"master": -6.0,
+"lane1_vol": -8.51
+},
+"Grail Cohort": {
+"master": -6.0,
+"lane1_vol": -9.09
+},
+"Hearth Charge": {
+"master": -6.0,
+"lane1_vol": -8.53
+},
+"Battalion of the Forgotten": {
+"master": -6.0,
+"lane1_vol": -1.39
+},
+"Hexscar Cohort": {
+"master": -5.56
+},
+"Overture of the Ninth Moon": {
+"master": -6.0,
+"lane1_vol": -1.04
+},
+"Mythic Fanfare": {
+"master": -6.0,
+"lane1_vol": -0.4
+},
+"Gilded Overture": {
+"master": -6.0,
+"lane1_vol": -0.67
+},
+"Ashshard Fanfare": {
+"master": -6.0,
+"lane2_vol": -19.27,
+"lane1_vol": -13.27
+},
+"Hex Charge": {
+"master": -6.0,
+"lane2_vol": -19.21,
+"lane1_vol": -13.21
+},
+"Storm Armada": {
+"master": -6.0,
+"lane1_vol": -7.19
+},
+"Druid Charge": {
+"master": -6.0,
+"lane1_vol": -9.12
+},
+"Sunken Horns": {
+"master": -6.0,
+"lane1_vol": -9.32
+},
+"Elder March": {
+"master": -6.0,
+"lane1_vol": -7.52
+},
+"Horns of the Rift": {
+"master": -6.0,
+"lane1_vol": -7.49
+},
+"Griffin Legion": {
+"master": -5.66
+},
+"Colony Vanguard": {
+"master": -6.0,
+"lane1_vol": -1.15
+},
+"Witchwood Armada": {
+"master": -6.0
+},
+"Ancient Fanfare": {
+"master": -6.0,
+"lane1_vol": -2.15
+},
+"Dragonfall Charge": {
+"master": -6.0,
+"lane1_vol": -1.19
+},
+"Legion of Sorrow": {
+"master": -6.0,
+"lane2_vol": -18.98,
+"lane1_vol": -12.98
+},
+"Hex Procession": {
+"master": -6.0,
+"lane2_vol": -19.2,
+"lane1_vol": -13.2
+},
+"Kingsbane Vanguard": {
+"master": -6.0,
+"lane1_vol": -9.2
+},
+"Moonlight Armada": {
+"master": -6.0,
+"lane1_vol": -8.49
+},
+"Briar Vanguard": {
+"master": -6.0,
+"lane1_vol": -7.93
+},
+"Frost Armada": {
+"master": -6.0,
+"lane1_vol": -8.56
+},
+"Wolf Fanfare": {
+"master": -6.0,
+"lane1_vol": -8.25
+},
+"Ravenlight Regiment": {
+"master": -6.0,
+"lane1_vol": -1.34
+},
+"Derelict Bows": {
+"master": -5.52
+},
+"Hearth Ensemble": {
+"master": -6.0,
+"lane1_vol": -0.37
+},
+"Regiment of Black Water": {
+"master": -6.0,
+"lane1_vol": -1.54
+},
+"Moonlit Legion": {
+"master": -6.0,
+"lane1_vol": -2.41
+},
+"Rotten Battalion": {
+"master": -6.0,
+"lane2_vol": -19.86,
+"lane1_vol": -13.86
+},
+"Highborn Bows": {
+"master": -6.0,
+"lane2_vol": -19.26,
+"lane1_vol": -13.26
+},
+"Grail Bows": {
+"master": -6.0,
+"lane1_vol": -7.97
+},
+"Silver Horns": {
+"master": -6.0,
+"lane1_vol": -7.09
+},
+"Thorn Banner": {
+"master": -6.0,
+"lane1_vol": -8.2
+},
+"Oath Overture": {
+"master": -6.0,
+"lane1_vol": -8.27
+},
+"Fell Horns": {
+"master": -6.0,
+"lane1_vol": -8.22
+},
+"Hologram Battalion": {
+"master": -6.0
+},
+"Wizard Psalm": {
+"master": -6.0,
+"lane1_vol": -0.91
+},
+"Iron Choir": {
+"master": -6.0
+},
+"Mirror Psalm": {
+"master": -6.0,
+"lane1_vol": -3.32
+},
+"Dread Litany": {
+"master": -6.0,
+"lane1_vol": -1.94
+},
+"Gloomforge Requiem": {
+"master": -6.0,
+"lane1_vol": -2.27
+},
+"Plague Monks": {
+"master": -4.85,
+"lane1_vol": 0.0
+},
+"Whispers of Iron Hills": {
+"master": -6.0,
+"lane1_vol": -0.96
+},
+"Druid Litany": {
+"master": -3.7
+},
+"Witchwood Psalm": {
+"master": -4.53
+},
+"Chorus of Saturn": {
+"master": -6.0,
+"lane1_vol": -2.62
+},
+"Nightwake Litany": {
+"master": -6.0,
+"lane1_vol": -2.48
+},
+"Chorus of Ashes": {
+"master": -6.0,
+"lane1_vol": -1.95
+},
+"Thorn Psalm": {
+"master": -6.0,
+"lane1_vol": -4.37
+},
+"Witchwood Oracle": {
+"master": -6.0,
+"lane1_vol": -4.41
+},
+"Night Sirens": {
+"master": -4.69,
+"lane1_vol": 0.0
+},
+"Shade Hymn": {
+"master": -5.55,
+"lane1_vol": 0.0
+},
+"Thorn Choir": {
+"master": -3.96
+},
+"Warden Choir": {
+"master": -3.52
+},
+"Warden Plainsong": {
+"master": -6.0,
+"lane1_vol": -1.24
+},
+"Monks of the Forgotten": {
+"master": -6.0,
+"lane1_vol": -0.28
+},
+"Raven Congregation": {
+"master": -6.0,
+"lane1_vol": -1.01
+},
+"Druid Monks": {
+"master": -6.0,
+"lane1_vol": -4.25
+},
+"Elven Litany": {
+"master": -6.0,
+"lane1_vol": -1.82
+},
+"Bone Monks": {
+"master": -3.57,
+"lane1_vol": 0.0
+},
+"Wraithwake Chant": {
+"master": -5.15,
+"lane1_vol": 0.0
+},
+"Banshee Voices": {
+"master": -4.55
+},
+"Amber Sirens": {
+"master": -3.9
+},
+"Ironspire Choir": {
+"master": -6.0,
+"lane1_vol": -1.34
+},
+"Sirens of Iron Hills": {
+"master": -5.67
+},
+"Wraith Chorus": {
+"master": -6.0,
+"lane1_vol": -1.32
+},
+"Wizard Engine Room": {
+"master": -6.0,
+"lane2_vol": -11.34,
+"lane1_vol": -2.34
+},
+"Rotten Obelisk": {
+"master": -6.0,
+"lane2_vol": -12.57,
+"lane1_vol": -3.57
+},
+"Bronze Cistern": {
+"master": -5.59,
+"lane2_vol": -9.0
+},
+"Novalight Reactor": {
+"master": -6.0,
+"lane1_vol": -6.18,
+"lane2_vol": -6.18
+},
+"Tomb of the North": {
+"master": -6.0,
+"lane1_vol": -3.42,
+"lane2_vol": -3.42
+},
+"Will-o-Wisp Furnace": {
+"master": -6.0,
+"lane1_vol": -2.8
+},
+"Druid Reactor": {
+"master": -6.0,
+"lane1_vol": -6.82
+},
+"Bleak Furnace": {
+"master": -2.8,
+"lane1_vol": 0.0
+},
+"Mistfall Well": {
+"master": -4.41,
+"lane1_vol": 0.0
+},
+"Rotten Monolith": {
+"master": -6.0,
+"lane2_vol": -10.13,
+"lane1_vol": -1.13
+},
+"Furnace of Lost Stars": {
+"master": -5.37,
+"lane2_vol": -9.0
+},
+"Dwarven Mass": {
+"master": -4.66,
+"lane2_vol": -9.0
+},
+"Cyber Mass": {
+"master": -6.0,
+"lane1_vol": -2.05,
+"lane2_vol": -2.05
+},
+"Core of the North": {
+"master": -6.0,
+"lane1_vol": -6.13,
+"lane2_vol": -6.13
+},
+"Wraith Obelisk": {
+"master": -6.0,
+"lane1_vol": -1.5
+},
+"Ghost Vault": {
+"master": -6.0,
+"lane1_vol": -5.46
+},
+"Sunless Pillar": {
+"master": -3.91,
+"lane1_vol": 0.0
+},
+"Nightgate Crater": {
+"master": -6.0,
+"lane1_vol": -0.95
+},
+"Abattoir Pillar": {
+"master": -6.0,
+"lane2_vol": -11.26,
+"lane1_vol": -2.26
+},
+"Wolf Mass": {
+"master": -6.0,
+"lane2_vol": -14.5,
+"lane1_vol": -5.5
+},
+"Throne of Sorrow": {
+"master": -6.0,
+"lane2_vol": -13.5,
+"lane1_vol": -4.5
+},
+"Gravity Vault": {
+"master": -3.16
+},
+"Mech Monolith": {
+"master": -6.0,
+"lane1_vol": -3.8,
+"lane2_vol": -3.8
+},
+"Ancient Core": {
+"master": -6.0,
+"lane1_vol": -2.83
+},
+"Revenant Core": {
+"master": -6.0,
+"lane1_vol": -2.47
+},
+"Shadewing Undercroft": {
+"master": -4.72,
+"lane1_vol": 0.0
+},
+"Cursed Furnace": {
+"master": -5.17,
+"lane1_vol": 0.0
+},
+"Bone Throne": {
+"master": -6.0,
+"lane2_vol": -13.67,
+"lane1_vol": -4.67
+},
+"Monolith of Embers": {
+"master": -6.0,
+"lane2_vol": -13.7,
+"lane1_vol": -4.7
+},
+"Rotwood Obelisk": {
+"master": -6.0,
+"lane2_vol": -11.04,
+"lane1_vol": -2.04
+},
+"Gravscar Mass": {
+"master": -6.0,
+"lane1_vol": -1.47,
+"lane2_vol": -1.47
+},
+"Gravglass Well": {
+"master": -6.0,
+"lane1_vol": -2.97,
+"lane2_vol": -2.97
+},
+"Grey Lady Depths": {
+"master": -6.0,
+"lane1_vol": -4.94
+},
+"Tomb of the Crypt": {
+"master": -6.0,
+"lane1_vol": -3.83
+},
+"Wraith Tomb": {
+"master": -6.0,
+"lane1_vol": -1.02
+},
+"Bloodsong Portal": {
+"master": -6.0,
+"lane1_vol": -60.0,
+"lane2_vol": -13.84
+},
+"Chromelight Rift": {
+"master": -6.0,
+"lane1_vol": -60.0,
+"lane2_vol": -13.83
+},
+"Landing of Saturn": {
+"master": -5.73
+},
+"Cryo Breach": {
+"master": -5.73
+},
+"Catacomb Riser": {
+"master": -1.04
+},
+"Druid Shockwave": {
+"master": -1.9
+},
+"Pulsar Eruption": {
+"master": -6.0,
+"lane1_vol": -2.03
+},
+"Gravelight Breach": {
+"master": -6.0,
+"lane1_vol": -10.1
+},
+"Shadowgate Detonation": {
+"master": -6.0,
+"lane1_vol": -10.63
+},
+"Black Portal": {
+"master": -9.84,
+"lane1_vol": -60.0
+},
+"Cryoveil Breach": {
+"master": -5.66
+},
+"Hexglass Detonation": {
+"master": -2.7
+},
+"Terminal Collapse": {
+"master": -6.0,
+"lane1_vol": -60.0,
+"lane2_vol": -13.58
+},
+"Gravheart Rift": {
+"master": -6.0,
+"lane1_vol": -60.0,
+"lane2_vol": -13.96
+},
+"Shade Strike": {
+"master": -5.73
+},
+"Cryoglass Eruption": {
+"master": -5.73
+},
+"Wizard Breach": {
+"master": -2.92
+},
+"Cursed Warning": {
+"master": -0.99
+},
+"Gravescar Awakening": {
+"master": -6.0,
+"lane1_vol": -2.16
+},
+"Rotten Impact": {
+"master": -6.0,
+"lane1_vol": -11.67
+},
+"Riser of the Fen": {
+"master": -6.0,
+"lane1_vol": -13.13
+},
+"Butcher Shockwave": {
+"master": -10.33,
+"lane1_vol": -60.0
+},
+"Chrome Collapse": {
+"master": -6.0,
+"lane1_vol": -1.3
+},
+"Impact of Ten Towers": {
+"master": -1.07
+},
+"Cosmic Fall": {
+"master": -6.0,
+"lane1_vol": -60.0,
+"lane2_vol": -13.48
+},
+"Bleak Rift": {
+"master": -6.0,
+"lane1_vol": -60.0,
+"lane2_vol": -13.71
+},
+"Mystic Omen": {
+"master": -4.61
+},
+"Summoning of the North": {
+"master": -4.61
+},
+"Ashwing Landing": {
+"master": -0.24
+},
+"Rift of the North": {
+"master": -2.68
+},
+"Plague Shockwave": {
+"master": -3.97
+},
+"Wispgate Landing": {
+"master": -6.0,
+"lane1_vol": -8.85
+},
+"Awakening of Titan": {
+"master": -6.0,
+"lane1_vol": -10.27
+},
+"Black Fall": {
+"master": -10.33,
+"lane1_vol": -60.0
+},
+"Chromevein Impact": {
+"master": -5.61
+},
+"Eldritch Cinders": {
+"master": 2.06,
+"lane1_vol": 0.0
+},
+"Spores of Embers": {
+"master": -2.2,
+"lane1_vol": 0.0
+},
+"Witching Rust": {
+"master": -6.0,
+"lane2_vol": -6.91,
+"lane1_vol": -0.91
+},
+"Spores of the North": {
+"master": -6.0,
+"lane2_vol": -11.1,
+"lane1_vol": -1.1
+},
+"Pulsar Sand": {
+"master": -0.83,
+"lane1_vol": 0.0
+},
+"Cinders of Titan": {
+"master": -0.66,
+"lane1_vol": 0.0
+},
+"Omen Glass": {
+"master": -6.0,
+"lane2_vol": -6.56,
+"lane1_vol": -0.56
+},
+"Otherworld Grain": {
+"master": -6.0,
+"lane2_vol": -10.0,
+"lane1_vol": 0.0
+},
+"Vector Ash": {
+"master": 1.04,
+"lane1_vol": 0.0
+},
+"Rust of Dust": {
+"master": -3.73,
+"lane1_vol": 0.0
+},
+"Dread Embers": {
+"master": -6.0,
+"lane2_vol": -12.38,
+"lane1_vol": -6.38
+},
+"Dwarven Sand": {
+"master": -6.0,
+"lane2_vol": -13.77,
+"lane1_vol": -3.77
+},
+"Xeno Glass": {
+"master": -1.75,
+"lane1_vol": 0.0
+},
+"Astral Ash": {
+"master": -3.5,
+"lane1_vol": 0.0
+},
+"Veilreach Smoke": {
+"master": -6.0,
+"lane2_vol": -12.55,
+"lane1_vol": -6.55
+},
+"Dragon Cinders": {
+"master": -6.0,
+"lane2_vol": -11.54,
+"lane1_vol": -1.54
+},
+"Grain of the Vale": {
+"master": -3.91,
+"lane1_vol": 0.0
+},
+"Spores of the Moor": {
+"master": -0.87,
+"lane1_vol": 0.0
+},
+"Witching Lichen": {
+"master": -6.0,
+"lane2_vol": -8.62,
+"lane1_vol": -2.62
+},
+"Bronze Rain": {
+"master": -6.0,
+"lane2_vol": -10.55,
+"lane1_vol": -0.55
+}
+}
