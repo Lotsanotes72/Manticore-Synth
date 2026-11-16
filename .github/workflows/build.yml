@@ -1,0 +1,41 @@
+name: Build Manticore (Windows)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        # No generator named: CMake picks whichever Visual Studio the runner has.
+        run: cmake -S . -B build -A x64
+
+      - name: Build VST3 + Standalone
+        run: cmake --build build --config Release --target Manticore_VST3 Manticore_Standalone --parallel
+
+      - name: Install Inno Setup
+        run: choco install innosetup -y --no-progress
+
+      - name: Build the installer
+        shell: pwsh
+        run: |
+          $iscc = Get-ChildItem "C:\Program Files*\Inno Setup*\ISCC.exe" | Select-Object -First 1
+          & $iscc.FullName installer\Manticore.iss
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: Manticore-Setup
+          path: dist/*.exe
+
+      - name: Upload raw VST3 (for manual install)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Manticore-VST3
+          path: build/Manticore_artefacts/Release/VST3/
