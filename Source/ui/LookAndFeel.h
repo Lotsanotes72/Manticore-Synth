@@ -18,6 +18,7 @@ namespace col
     const juce::Colour amber    { 0xffffb33f };
     const juce::Colour amberDim { 0xff94621f };
     const juce::Colour red      { 0xffff5c4d };
+    const juce::Colour ghost    { 0xff9cc9ff };      // Haunt: pale spectral blue
 
     inline juce::Colour band (int b)
     {
@@ -70,4 +71,5 @@ public:
 void drawPanel (juce::Graphics&, juce::Rectangle<float> r, float s, bool ornaments = true);
 void drawEmblem (juce::Graphics&, juce::Rectangle<float> r);
 void drawStar (juce::Graphics&, juce::Rectangle<float> r, bool filled, juce::Colour c);
+void drawPadlock (juce::Graphics&, juce::Rectangle<float> r, bool closed, juce::Colour c);
 }

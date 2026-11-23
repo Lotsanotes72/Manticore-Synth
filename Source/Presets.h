@@ -22,6 +22,7 @@ public:
     const juce::var& factoryData (int i) const { return data[(size_t) i]; }
     int numFactory() const { return (int) infos.size(); }
     int findFactory (const juce::String& name) const;
+    juce::String currentName (const juce::String& name) const;     // follows factory presets renamed in an update
 
     static juce::File rootFolder();     // Documents/Manticore
     static juce::File userFolder();     // Documents/Manticore/Presets
@@ -40,5 +41,6 @@ private:
     std::vector<PresetInfo> infos;
     std::vector<juce::var> data;
     juce::StringArray favourites;
+    juce::StringPairArray renamedFrom;      // old factory name -> current name
 };
 }

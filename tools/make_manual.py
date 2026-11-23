@@ -55,8 +55,9 @@ s = [NextPageTemplate('page'), PageBreak()]
 # ------------------------------------------------------------------ contents
 s.append(P('Contents', 'h1'))
 toc = ['1. Welcome', '2. Installation', '3. The Window at a Glance', '4. The Generator Grid', '5. Generator Modules',
-       '6. Modulation', '7. Effects', '8. The Arpeggiator', '9. Voice, Performance and MIDI', '10. Presets, the Browser and Favourites',
-       '11. Sound Design Recipes', '12. Factory Preset List', '13. Specifications and Troubleshooting', 'Appendix: Building from GitHub']
+       '6. Modulation', '7. Effects', '8. The Arpeggiator', '9. The XY Vector Mixer', '10. Mutate, Breed and Haunt',
+       '11. Voice, Performance and MIDI', '12. Presets, the Browser and Favourites', '13. Sound Design Recipes',
+       '14. Factory Preset List', '15. Specifications and Troubleshooting', 'Appendix: Building from GitHub']
 for t in toc:
     s.append(P(t, 'step'))
 s.append(Spacer(1, 12))
@@ -79,13 +80,18 @@ s.append(P('The layout follows the logic of the modular grid synths it was inspi
            'String colours: dark slate, teal and amber, with Cinzel and Rajdhani type.'))
 s += tipbox('QUICK START', 'Open the BROWSE page, pick a category on the left and click any preset to hear it. Turn the four '
             'Ctrl A-D macros on the SYNTH page: in every factory preset A shapes the tone, B adds motion, C opens up the space '
-            'and D adds grit or character. Click the star beside a preset to keep it in your Favourites.')
+            'and D adds grit or character. Click the star beside a preset to keep it in your Favourites. Then press MUTATE in the '
+            'toolbar for a fresh variation, or HAUNT to let the sound drift on its own.')
+s += tipbox('NEW IN 1.1', 'Mutate (whole patch or one module), Breed (including Breed with a Favourite), Haunt with Follow and '
+            'Capture, padlocks on every section including the grid layout, 48-step Undo, the XY Vector Mixer page, and clearer names '
+            'for 40 factory presets whose instrument word did not match their sound. Presets you had starred keep their stars.',
+            PALE_AMBER, AMBER)
 s += img('main.png', caption='The SYNTH page with the Wyrmglass Cathedral preset: OSC 1 selected in the grid, ENV 1 in the modulation rack.')
 
 # ------------------------------------------------------------------ 2 Installation
 s.append(PageBreak())
 s.append(P('2. Installation', 'h1'))
-s.append(P('Run <b>Manticore-1.0.0-Setup.exe</b>. The installer has three parts. The VST3 plug-in always goes to '
+s.append(P('Run <b>Manticore-1.1.0-Setup.exe</b>. The installer has three parts. The VST3 plug-in always goes to '
            '<b>C:\\Program Files\\Common Files\\VST3</b>, the standard folder REAPER scans. The standalone app is optional and '
            'can put a Manticore shortcut on your desktop. This manual is copied alongside it.'))
 s.append(P('Then, in REAPER:'))
@@ -102,17 +108,19 @@ s.append(P('The standalone app is handy for playing without a DAW. Choose your a
 
 # ------------------------------------------------------------------ 3 Window
 s.append(P('3. The Window at a Glance', 'h1'))
-s.append(P('Drag the corner at the bottom right to resize the window from 60% to 200% of its normal 1400 x 900 size. It keeps its '
+s.append(P('Drag the corner at the bottom right to resize the window from 60% to 200% of its normal 1400 x 944 size. It keeps its '
            'proportions and remembers the size, the page you were on and the module you were editing.'))
-s += img(crop('main.png', (0, 0, 1400, 66), 'crop_header.png'), caption='The header')
-s.append(P('<b>The header</b> holds the page tabs (SYNTH, EFFECTS, ARP, BROWSE), the preset bar (arrows step through the browser\'s '
-           'current list, the name opens the browser, the star marks a favourite, SAVE stores your own, INIT starts from scratch), '
-           'the A/B comparison buttons with copy, UNDO and REDO. Under the buttons, a status line shows how many voices are '
-           'sounding and confirms actions such as saving.'))
+s += img(crop('main.png', (0, 0, 1400, 112), 'crop_header.png'), caption='The header and the toolbar')
+s.append(P('<b>The header</b> holds the page tabs (SYNTH, EFFECTS, ARP, XY, BROWSE) and the preset bar (arrows step through the '
+           'browser\'s current list, the name opens the browser, the star marks a favourite, SAVE stores your own, INIT starts from '
+           'scratch). Under the buttons, a status line shows how many voices are sounding and confirms actions such as saving.'))
+s.append(P('<b>The toolbar</b> below it holds the sound tools described in section 10: MUTATE with its Strength, BREED and Breed '
+           'with a Favourite (the button with the star), and HAUNT with its Depth, Speed, FOLLOW and CAPTURE. At the right are the '
+           'A/B comparison buttons with copy, UNDO and REDO.'))
 s.append(P('<b>The SYNTH page</b> has the generator grid, lane mixer, macros and voice settings down the left; the editor for the '
            'selected module top right; and the modulation rack bottom right. <b>EFFECTS</b> shows the effects grid, aux returns, '
            'lane sends, the selected effect\'s editor and a live signal-flow map. <b>ARP</b> is the step arpeggiator and '
-           '<b>BROWSE</b> the preset browser.'))
+           '<b>XY</b> the vector mixer and <b>BROWSE</b> the preset browser.'))
 s.append(P('Every knob works the same way: drag up and down to turn it, double-click it to reset, double-click the value under it '
            'to type a number, and right-click it to modulate it (see section 6). An amber arc just outside a knob shows the range '
            'that modulation sweeps it through.'))
@@ -120,7 +128,7 @@ s.append(P('Every knob works the same way: drag up and down to turn it, double-c
 # ------------------------------------------------------------------ 4 Grid
 s.append(PageBreak())
 s.append(P('4. The Generator Grid', 'h1'))
-s += img(crop('braam.png', (0, 66, 460, 600), 'crop_grid.png'), width=3.6 * inch,
+s += img(crop('braam.png', (0, 112, 460, 646), 'crop_grid.png'), width=3.6 * inch,
          caption='Lane 1 stacks three oscillators and a shaper; lane 2 takes lane 1 as its input and filters it.')
 s.append(P('The grid has four lanes, each with four slots. Click an empty slot (or right-click any slot) to choose a module. '
            'Click a filled slot to open that module in the editor. Signal flows down each lane: generators (OSC, FM, NOISE, EXC) '
@@ -136,7 +144,7 @@ s.append(P('<b>The amp envelope.</b> ENV 1 shapes the volume of every lane at it
            'voice. A voice ends when ENV 1 finishes its release.'))
 s.append(P('<b>The lane mixer</b> under the grid sets each lane\'s volume and pan, and how much it sends to the three aux effect '
            'buses. Sends are taken after the lane volume.'))
-s += img(crop('main.png', (0, 404, 460, 900), 'crop_lanes.png'), width=3.6 * inch, caption='Lane mixer, macros and voice settings.')
+s += img(crop('main.png', (0, 450, 460, 944), 'crop_lanes.png'), width=3.6 * inch, caption='Lane mixer, macros and voice settings.')
 
 # ------------------------------------------------------------------ 5 Modules
 s.append(PageBreak())
@@ -219,7 +227,7 @@ s.append(PageBreak())
 s.append(P('6. Modulation', 'h1'))
 s.append(P('The modulation rack under the module editor has five families of modulators (ENV, LFO, MSEG, MAP, MATH), four of '
            'each, plus the MATRIX. Choose the family on the left and the number on the right.'))
-s += img(crop('bowed.png', (456, 455, 1400, 900), 'crop_mseg.png'), caption='MSEG 1: a drawable multi-segment envelope.')
+s += img(crop('bowed.png', (456, 501, 1400, 944), 'crop_mseg.png'), caption='MSEG 1: a drawable multi-segment envelope.')
 s.append(P('Envelopes', 'h2'))
 s.append(P('Delay, Attack, Decay, Sustain and Release, with <b>Slope</b> bending the curves (right is snappy, left is slow), '
            '<b>Velocity</b> scaling the whole envelope by how hard you play, <b>Key Scale</b> shortening higher notes and <b>One Shot</b> '
@@ -244,7 +252,7 @@ s.append(P('Mod Math', 'h2'))
 s.append(P('Combines two sources: A+B, A-B, AxB, Max, Min, Average, Lag A by B (smooths a stepped source), Quantize A by B '
            '(turns a smooth source into steps), Abs A and Invert A, scaled by Amount. Use the result like any other source.'))
 s.append(P('The matrix', 'h2'))
-s += img(crop('mallet_matrix.png', (456, 455, 1400, 900), 'crop_matrix.png'), caption='The modulation matrix.')
+s += img(crop('mallet_matrix.png', (456, 501, 1400, 944), 'crop_matrix.png'), caption='The modulation matrix.')
 s.append(P('24 slots, each connecting a <b>Source</b> to a <b>Target</b> by an <b>Amount</b> (negative inverts). <b>Via</b> is an '
            'optional second source that scales the connection: put Mod Wheel there and the wheel fades the modulation in. Targets '
            'are chosen from a menu grouped by module. An Amount of 100% sweeps the whole range of the target.'))
@@ -293,8 +301,94 @@ s.append(P('Each of the 16 steps can be switched on or off (a rest), transposed 
            'and its own gate length. A step at 100% gate ties into the next step, which glides in Mono and Legato voice modes. '
            'Drag the bars to set them; double-click a bar to reset it.'))
 
-# ------------------------------------------------------------------ 9 Voice
-s.append(P('9. Voice, Performance and MIDI', 'h1'))
+# ------------------------------------------------------------------ 9 XY
+s.append(PageBreak())
+s.append(P('9. The XY Vector Mixer', 'h1'))
+s += img('xy.png', width=6.0 * inch, caption='The XY page: XY 1 opens the filter and morphs the wavetable to the right, adds resonance upwards.')
+s.append(P('The XY page has four pads. Each pad moves up to four targets on its horizontal axis and four on its vertical axis, so a '
+           'single gesture can morph a whole patch: brighter and wider to the right, darker and closer to the left, more resonant '
+           'towards the top. The centre of a pad leaves the sound exactly as stored; moving away pushes every target on that axis '
+           'by up to its amount (negative amounts move it the other way).'))
+s += bullets([
+    '<b>Assigning targets:</b> click a target box under a pad and choose a parameter, then set its amount with the slider. Quicker: '
+    'right-click any knob and choose <b>Assign to XY pad</b>, then the pad and axis. The knob\'s amber arc shows the range the pad sweeps.',
+    '<b>Playing:</b> drag the dot. Double-click a pad to send it back to the centre.',
+    '<b>Automation:</b> the eight pad positions (XY 1 X to XY 4 Y) are host parameters, so you can draw pad movements in REAPER '
+    'or link them to a controller with REAPER\'s parameter modulation.',
+    '<b>As modulation sources:</b> the pads also appear as XY 1 X ... XY 4 Y in the Mod Matrix sources and in Mod Math. They are '
+    'global sources, so unlike envelopes they can move effect parameters too.'])
+s += tipbox('A ONE-HAND MORPH', 'Put VCF 1 Cutoff (+50%) and OSC 1 Wave (+40%) on XY 1 X, VCF 1 Reso (+35%) and OSC 1 Detune (-30%) on '
+            'XY 1 Y, and Aux 1 Return on XY 2 Y. Now one hand plays the tone while the other plays the space.')
+
+# ------------------------------------------------------------------ 10 Mutate / Breed / Haunt
+s.append(PageBreak())
+s.append(P('10. Mutate, Breed and Haunt', 'h1'))
+s.append(P('Three tools in the toolbar make new sounds from the one you have. All three respect the padlocks, keep the pitch and '
+           'key protected, and leave a level-matched result, so you can keep pressing without your monitors jumping. Every press '
+           'can be undone.', 'lead'))
+s.append(P('Mutate', 'h2'))
+s.append(P('<b>MUTATE</b> makes a new variation of the current sound by nudging the unlocked controls. The <b>Strength</b> slider '
+           'beside it sets how far: around 10-25% gives close cousins, 35-50% clear variations, 70% and up wild new creatures. '
+           'At higher strengths Mutate may also rearrange the grid (swap two processors in a lane, add a filter, shaper, comb, ring '
+           'modulator or EQ below the sources, take one away, or switch a lane input), add or rewire a few matrix routings and '
+           'reorder effects. It never changes any Tune or Fine knob, transpose, the macro knobs, routings driven by a macro, or Arp '
+           'on/off; ratios and ring-modulator intervals only jump to musical values. Behind the scenes it renders a short test '
+           'chord offline, rejects candidates that collapse, blow up or can\'t reach the original loudness, and matches the level. The preset name gains '
+           'a marker such as <b>~3</b>.'))
+s.append(P('<b>Mutate one module.</b> Every module editor (generators, filters, modulators and effects) has its own <b>MUTATE</b> '
+           'button at the top right. It varies only that module at the toolbar\'s Strength and ignores the padlocks, since you chose '
+           'the module yourself. Use it to try new LFO shapes, a different filter model or a fresh reverb without touching anything else.'))
+s.append(P('Padlocks', 'h2'))
+s += img(crop('locks.png', (0, 112, 1400, 545), 'crop_locks.png'), caption='Padlocks closed on the grid Layout, Lane 2 and the Modulators (amber = locked).')
+s.append(P('Each section has a padlock. A closed (amber) padlock tells Mutate, Breed and Haunt to leave that section alone:'))
+s += small_table([['Padlock', 'Where', 'What it keeps'],
+                  ['Layout', 'Generator Grid title', 'Every module in its slot and the lane inputs: Mutate and Breed can\'t move, add or remove modules'],
+                  ['Lane 1-4', 'Beside each LANE caption', 'The settings of the modules in that lane and its lane mixer controls'],
+                  ['Modulators', 'Modulation rack header', 'All envelopes, LFOs, MSEGs, mappers and mod math (the drawn shapes are never mutated)'],
+                  ['Matrix', 'Modulation rack header', 'The 24 matrix routings and amounts'],
+                  ['Effects', 'FX Grid title (EFFECTS page)', 'Effect chains, effect settings and aux returns'],
+                  ['Arp', 'ARP page', 'The arpeggiator pattern and settings'],
+                  ['XY pads', 'XY page', 'The pad targets and amounts (and Haunt won\'t move the pads)']],
+                 [1.0 * inch, 1.8 * inch, 4.2 * inch])
+s += tipbox('LOCK, THEN MUTATE', 'Found a pad whose envelope and effects are perfect? Lock Modulators, Effects and Layout, then mutate: '
+            'only the oscillator and filter settings change. Lock everything except the Matrix to discover new movement for a sound you '
+            'otherwise love.', PALE_AMBER, AMBER)
+s.append(P('Breed and A/B', 'h2'))
+s.append(P('<b>A</b> and <b>B</b> hold two complete sounds; loading presets or editing only changes the slot you are on. Fill both '
+           'and press <b>BREED</b>: each lane (with the modules in it) comes from one parent, each modulator from one parent, the '
+           'matrix, effects, arpeggiator and XY pads from one parent each, and values that exist in both are blended part of the way '
+           'towards the other parent. Some matrix routings are inherited from the other parent too. Modules are re-assigned when '
+           'both parents use the same one, so the child never has an inactive duplicate. The child replaces the slot you are on (the '
+           'other parent stays in its slot, so you can breed again), sits at the parents\' average loudness, and gets a name built from '
+           'both: <i>Kingsbane Mallets</i> bred with <i>Phantom Tapestry</i> might become <i>Kingsbane Tapestry</i>. Locked '
+           'sections come from the sound you are on. Hover over BREED to see which two sounds it will cross.'))
+s.append(P('<b>Breed with a Favourite</b> (the BREED button with the star) picks one of your starred presets at random, puts it in the '
+           'other slot and breeds it with the current sound. Star a handful of presets you love and press it repeatedly for an '
+           'endless supply of relatives.'))
+s.append(P('Haunt', 'h2'))
+s += img(crop('haunt.png', (846, 250, 1390, 495), 'crop_haunt.png'), width=4.6 * inch,
+         caption='Haunt running: pale blue ghost pointers show where each control has drifted. The stored settings do not move.')
+s.append(P('Press <b>HAUNT</b> and the patch begins to drift on its own. Every unlocked control wanders slowly and smoothly around '
+           'its setting, each at its own unrelated speed, so the sound never quite repeats. That is ideal for ambient beds, '
+           'paranormal atmospheres and long drones. Matrix amounts drift too, so routings breathe in and out, and so do the XY pads. '
+           'The stored knob positions never move, so nothing is written to your automation; instead, pale blue <b>ghost pointers</b> '
+           'on the knobs (and a ghost ring on the XY pads) show where each control has wandered. <b>Depth</b> sets how far and '
+           '<b>Speed</b> how fast. Turn Haunt off and the sound glides home over about a second.'))
+s += bullets([
+    '<b>FOLLOW</b> links the drift to your playing: dig in with hard velocities (or push the mod wheel) and it wanders further; play '
+    'softly or stop and it settles home.',
+    '<b>CAPTURE</b> keeps what Haunt is playing right now as the new knob settings, then turns Haunt off. Haunt is a sound-design '
+    'tool as much as a performance one: let it wander, and capture the moment you like.',
+    'Pitch (Tune, Fine, key tracking), choices, switches and the envelope delay never drift. Locked sections stay still.',
+    'Haunt, Depth, Speed and Follow are host parameters, so you can automate Haunt switching on for a bridge or a breakdown. They are '
+    'performance settings: loading presets, A/B, Undo and Mutate leave them as they are, and they are not saved in presets.'])
+s.append(P('Undo and Redo', 'h2'))
+s.append(P('<b>UNDO</b> and <b>REDO</b> step through the last 48 changes: preset loads, knob and switch moves, grid changes, drawn '
+           'shapes, A/B switches, Mutate, Breed and Capture. Each knob gesture counts as one step.'))
+
+# ------------------------------------------------------------------ 11 Voice
+s.append(PageBreak())
+s.append(P('11. Voice, Performance and MIDI', 'h1'))
 s.append(P('<b>Voices</b> sets the polyphony (1-32). <b>Voice Mode</b> is Poly, Mono (every new note retriggers the envelopes) or '
            'Legato (envelopes only retrigger when you lift between notes). <b>Glide</b> sets the portamento time and <b>Glide Mode</b> '
            'whether it always happens or only between overlapping notes. <b>Bend +/-</b> set the pitch-bend range and <b>Transpose</b> '
@@ -305,7 +399,7 @@ s.append(P('Manticore responds to note on and off with velocity, pitch bend, mod
 
 # ------------------------------------------------------------------ 10 Presets
 s.append(PageBreak())
-s.append(P('10. Presets, the Browser and Favourites', 'h1'))
+s.append(P('12. Presets, the Browser and Favourites', 'h1'))
 s += img('browser.png', caption='The BROWSE page.')
 s.append(P('The browser lists all 500 factory presets plus your own. Choose a category on the left (or All, Favourites or User), '
            'narrow it with the genre tags (Rock, Metal, Prog, Cinematic, Ambient, Game; several tags show presets that match any '
@@ -320,11 +414,12 @@ s.append(P('Saving, A/B and undo', 'h2'))
 s.append(P('SAVE (in the header or the browser) asks for a name, a category, genre tags and a description, and writes the preset to '
            'Documents\\Manticore\\Presets. The header arrows step through whatever the browser is currently showing, so you can '
            'filter to "Metal Leads" and then flip through them while you play. <b>A</b> and <b>B</b> hold two complete settings '
-           'for comparison and the copy button clones one into the other. <b>UNDO</b> and <b>REDO</b> track every change. '
-           '<b>INIT</b> returns to a plain oscillator into a filter.'))
+           'for comparison and the copy button clones one into the other (A/B is also what Breed works with, see section 10). '
+           '<b>UNDO</b> and <b>REDO</b> step through the last 48 changes. <b>INIT</b> returns to a plain oscillator into a filter. '
+           'A mutated or bred sound is new, so save it before starring it.'))
 
 # ------------------------------------------------------------------ 11 Recipes
-s.append(P('11. Sound Design Recipes', 'h1'))
+s.append(P('13. Sound Design Recipes', 'h1'))
 recipes = [
     ('A plucked fantasy lute', 'INIT. Set slot L1-S1 to EXC 1 (Burst, Decay 6 ms), S2 to COMB 1 (Feedback 0.99, Damping 0.2), S3 to '
      'VCF 1 (SVF LP 12, cutoff 6 kHz). Set ENV 1 Sustain 0, Decay 3 s. Right-click EXC 1 Color, Modulate with Velocity.'),
@@ -344,7 +439,7 @@ for title, text in recipes:
 
 # ------------------------------------------------------------------ 12 Preset list
 s.append(PageBreak())
-s.append(P('12. Factory Preset List', 'h1'))
+s.append(P('14. Factory Preset List', 'h1'))
 s.append(P('500 presets in twelve categories, each tagged with the genres it suits best. The first sentence of each description is '
            'shown here; the browser shows it in full with the macro assignments. All presets are level-matched to sit at a similar '
            'loudness.'))
@@ -365,7 +460,7 @@ for cat in order:
 
 # ------------------------------------------------------------------ 13 Specs
 s.append(PageBreak())
-s.append(P('13. Specifications and Troubleshooting', 'h1'))
+s.append(P('15. Specifications and Troubleshooting', 'h1'))
 rows = [['Item', 'Detail'],
         ['Format', 'VST3 instrument (64-bit Windows) and standalone app'],
         ['Architecture', '4 lanes x 4 slots; module pool of 28 generators and processors; lane-to-lane routing'],
@@ -375,6 +470,8 @@ rows = [['Item', 'Detail'],
         ['Modulation', '4 envelopes, 4 LFOs, 4 MSEGs (16 points), 4 mappers (32 steps), 4 mod math, 24-slot matrix, 4 macros'],
         ['Effects', 'Main bus plus 3 aux buses, 4 slots each; 17 effect units in 8 types'],
         ['Arpeggiator', '16 steps with per-step on, transpose, velocity and gate; 7 orders; host-synced'],
+        ['XY mixer', '4 pads, 4 targets per axis, automatable, also global modulation sources'],
+        ['Sound tools', 'Mutate (patch or module), Breed (A/B or with a favourite), Haunt with Follow and Capture, 10 padlocks, 48-step undo'],
         ['Polyphony', '1 to 32 voices; Poly, Mono and Legato modes with glide'],
         ['Sample rates', 'Tested at 44.1, 48, 96 and 192 kHz'],
         ['Presets', '500 factory presets, unlimited user presets, favourites'],
@@ -389,14 +486,19 @@ s += bullets([
     '<b>The arpeggiator is silent:</b> make sure some steps are on and Steps is at least 1; with the transport stopped it runs at the session tempo.',
     '<b>High CPU:</b> unison above 8 voices, many additive partials and long polyphonic releases cost the most. Lower Voices, '
     'Unison or Partials, or freeze the track in REAPER.',
-    '<b>Plug-in missing after install:</b> clear the cache and re-scan in REAPER\'s VST preferences.'])
+    '<b>Plug-in missing after install:</b> clear the cache and re-scan in REAPER\'s VST preferences.',
+    '<b>Mutate or Breed says it couldn\'t find a playable result:</b> lower the Strength, or open a padlock or two. Breed also needs two '
+    'different sounds in A and B.',
+    '<b>The sound keeps moving on its own:</b> Haunt is on (the HAUNT button is lit). Turn it off, or press CAPTURE to keep the current state.',
+    '<b>A preset name changed after updating:</b> 40 factory presets were renamed in 1.1 so their names match their sound '
+    '(for example Kingsbane Glockenspiel is now Kingsbane Mallets). Stars and saved projects follow the new names automatically.'])
 
 # ------------------------------------------------------------------ appendix
 s.append(P('Appendix: Building from GitHub', 'h1'))
 s.append(P('Manticore builds the same way as the other Fellowship plug-ins. Upload the project folder to a GitHub repository; '
            'the included workflow (.github/workflows/build.yml) runs automatically on every push to main, or by hand from the '
            '<b>Actions</b> tab with <b>Run workflow</b>. When it finishes (about 15-25 minutes), open the run and download '
-           '<b>Manticore-Setup</b>: inside is Manticore-1.0.0-Setup.exe. A second download, Manticore-VST3, holds the bare plug-in.'))
+           '<b>Manticore-Setup</b>: inside is Manticore-1.1.0-Setup.exe. A second download, Manticore-VST3, holds the bare plug-in.'))
 s.append(P('The factory presets are generated by tools/make_presets.py and level-matched by tools/normalize_presets.py; the icons '
            'come from tools/make_icons.py and this manual from tools/make_manual.py. You only need these if you want to change '
            'them. The built-in presets are read from Resources/factory_presets.json.gz.'))

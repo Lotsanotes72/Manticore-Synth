@@ -10,6 +10,7 @@ class Engine
 public:
     Engine();
     void bind (juce::AudioProcessorValueTreeState&);
+    void bindValues (std::vector<std::atomic<float>>& values);   // offline measuring: read from a private value array
     void prepare (double sampleRate, int maxBlock);
     void reset();
     void process (juce::AudioBuffer<float>&, juce::MidiBuffer&, juce::AudioPlayHead*);
@@ -25,12 +26,19 @@ public:
     // for the offline tests
     const Shared& shared() const { return sh; }
 
+    // ---- Haunt
+    std::atomic<uint32_t> locks { 0 };                 // padlock bits (see Evolve.h): locked sections don't drift
+    void snapHauntHome() { hauntSnap = true; }         // after Capture: drop the drift at once instead of gliding home
+    float hauntOffset (int paramIndex) const { return hauntView[(size_t) paramIndex].load (std::memory_order_relaxed); }   // normalised
+    std::atomic<float> hauntLevel { 0 };               // 0..1 for the UI
+
 private:
     struct Chunk { int pos, len; float lfo[4]; };
     void updateShared();
     void computeGlobalMod (const float* lfo);
     void advanceGlobalLfos (int n);
     void renderVoices (int from, int to);
+    void updateHaunt (int numSamples);
     void noteOn (int note, float vel);
     void noteOff (int note);
     void allNotesOff();
@@ -38,6 +46,15 @@ private:
 
     Shared sh;
     std::vector<std::atomic<float>*> raw;
+    std::vector<float> rawVal;                          // last raw (stored) value of every parameter
+    std::vector<float> hOff;                            // haunt offsets (normalised) applied this block
+    std::vector<float> hSpeed;                          // per-parameter wander speed
+    std::vector<std::atomic<float>> hauntView;
+    std::atomic<bool> hauntSnap { false };
+    double hauntTime = 0;
+    float hauntAmt = 0, followLvl = 0, lastVel = 0.8f;
+    int hauntCountdown = 0, hauntElapsed = 0;
+    bool hauntTick = false;
     std::array<Voice, kMaxVoices> voices;
     FxRack fx;
     Arp arp;
@@ -68,6 +85,7 @@ private:
     float masterPrev = -1;
     int maxVoices = 16;
     struct Idx { int master, glide, voices, vmode, glideMode, pbUp, pbDown, transpose, arpOn, arpHold, macro[4], slot[4][4], fxSlot[4][4],
-                 mtxSrc[kNumMatrix], mtxVia[kNumMatrix], mtxDst[kNumMatrix], mtxAmt[kNumMatrix], lfoBase[4]; } ix {};
+                 mtxSrc[kNumMatrix], mtxVia[kNumMatrix], mtxDst[kNumMatrix], mtxAmt[kNumMatrix], lfoBase[4],
+                 xyPos[2 * kNumXY], xyDst[kNumXYRows], xyAmt[kNumXYRows], hauntOn, hauntDepth, hauntSpeed, hauntFollow; } ix {};
 };
 }

@@ -84,6 +84,7 @@ void Knob::attach (APVTS& s, const juce::String& id, const juce::String& tip)
     att.reset();
     apvts = &s;
     paramId = id;
+    pIndex = paramIndex (id);
     att = std::make_unique<APVTS::SliderAttachment> (s, id, slider);
     if (auto* p = s.getParameter (id)) slider.setDoubleClickReturnValue (true, p->convertFrom0to1 (p->getDefaultValue()));
     const int idx = paramIndex (id);
@@ -115,11 +116,28 @@ void Knob::refreshModulation()
             if (sourceBipolar (src)) { pos += std::abs (a); neg -= std::abs (a); }
             else if (a > 0) pos += a; else neg += a;
         }
+    if (apvts != nullptr && d > 0)
+        for (int n = 0; n < kNumXY; ++n)
+            for (int a = 0; a < 2; ++a)
+                for (int k = 0; k < kXYTargets; ++k)
+                    if (juce::roundToInt (getParam (*apvts, id::xyTarget (n, a, k, "dst"))) == d)
+                    {
+                        const float amt = std::abs (getParam (*apvts, id::xyTarget (n, a, k, "amt")));
+                        pos += amt; neg -= amt;
+                    }
     auto& pr = slider.getProperties();
     const bool changed = (float) pr.getWithDefault ("modPos", 0.0f) != pos || (float) pr.getWithDefault ("modNeg", 0.0f) != neg;
     pr.set ("modPos", pos);
     pr.set ("modNeg", neg);
     if (changed) slider.repaint();
+}
+
+void Knob::setGhost (float off)
+{
+    if (std::abs (off - ghost) < 0.0015f && (off == 0.0f) == (ghost == 0.0f)) return;
+    ghost = off;
+    slider.getProperties().set ("ghost", off);
+    slider.repaint();
 }
 
 void Knob::resized()
@@ -166,6 +184,11 @@ void Knob::showModMenu()
                 any = true;
             }
         if (any) m.addSubMenu ("Remove modulation", existing);
+        juce::PopupMenu xy;
+        for (int n = 0; n < kNumXY; ++n)
+            for (int a = 0; a < 2; ++a)
+                xy.addItem (2000 + n * 2 + a, "XY " + juce::String (n + 1) + (a == 0 ? "  X axis" : "  Y axis"));
+        m.addSubMenu ("Assign to XY pad", xy);
     }
     m.addItem (1, "Reset to default");
     juce::Component::SafePointer<Knob> safe (this);
@@ -176,6 +199,17 @@ void Knob::showModMenu()
         if (r == 1)
         {
             if (auto* p = s.getParameter (safe->paramId)) { p->beginChangeGesture(); p->setValueNotifyingHost (p->getDefaultValue()); p->endChangeGesture(); }
+        }
+        else if (r >= 2000)
+        {
+            const int n = (r - 2000) / 2, a = (r - 2000) % 2;
+            for (int k = 0; k < kXYTargets; ++k)
+                if (getParam (s, id::xyTarget (n, a, k, "dst")) < 0.5f)
+                {
+                    setParam (s, id::xyTarget (n, a, k, "dst"), (float) d);
+                    setParam (s, id::xyTarget (n, a, k, "amt"), 0.5f);
+                    break;
+                }
         }
         else if (r >= 1000)
         {

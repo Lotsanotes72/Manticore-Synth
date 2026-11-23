@@ -124,8 +124,9 @@ struct Shared
     float modWheel = 0, aftertouch = 0, bend = 0, expression = 1, macro[4] {};
     float globalLfo[4] {};
     bool lfoGlobal[4] {};
+    float xy[2 * kNumXY] {};                               // XY pad positions, bipolar (-1..+1)
     struct MtxSlot { int src, via, dst; float amt; };
-    MtxSlot mtx[kNumMatrix];
+    MtxSlot mtx[kNumMatrix + kNumXYRows];
     int nMtx = 0;
     float bendUp = 2, bendDown = 2, transpose = 0;
     double beatsPerSample = 120.0 / 60.0 / 48000.0;

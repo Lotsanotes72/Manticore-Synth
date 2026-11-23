@@ -3217,7 +3217,7 @@
   }
  },
  {
-  "name": "Fae Music Box",
+  "name": "Fae Chime",
   "cat": "Keys & Bells",
   "tags": [
    "Cinematic",
@@ -3294,7 +3294,7 @@
   }
  },
  {
-  "name": "Ashreach Harmonium",
+  "name": "Ashreach Keys",
   "cat": "Keys & Bells",
   "tags": [
    "Rock",
@@ -3309,7 +3309,7 @@
   }
  },
  {
-  "name": "Oakwing Tines",
+  "name": "Oakwing Harmonium",
   "cat": "Keys & Bells",
   "tags": [
    "Rock",
@@ -3324,7 +3324,7 @@
   }
  },
  {
-  "name": "Pale Clocktower",
+  "name": "Pale Keys",
   "cat": "Keys & Bells",
   "tags": [
    "Metal",
@@ -3339,7 +3339,7 @@
   }
  },
  {
-  "name": "Kingsbane Glockenspiel",
+  "name": "Kingsbane Mallets",
   "cat": "Keys & Bells",
   "tags": [
    "Cinematic",
@@ -3355,7 +3355,7 @@
   }
  },
  {
-  "name": "Belfry of Sorrow",
+  "name": "Chime of Sorrow",
   "cat": "Keys & Bells",
   "tags": [
    "Cinematic",
@@ -3432,7 +3432,7 @@
   }
  },
  {
-  "name": "Haunted Harmonium",
+  "name": "Haunted Chime",
   "cat": "Keys & Bells",
   "tags": [
    "Cinematic",
@@ -3492,7 +3492,7 @@
   }
  },
  {
-  "name": "Warden Music Box",
+  "name": "Warden Keys",
   "cat": "Keys & Bells",
   "tags": [
    "Rock",
@@ -3507,7 +3507,7 @@
   }
  },
  {
-  "name": "Stag Hammers",
+  "name": "Stag Harmonium",
   "cat": "Keys & Bells",
   "tags": [
    "Rock",
@@ -3584,7 +3584,7 @@
   }
  },
  {
-  "name": "Will-o-Wisp Keys",
+  "name": "Will-o-Wisp Belfry",
   "cat": "Keys & Bells",
   "tags": [
    "Cinematic",
@@ -3629,7 +3629,7 @@
   }
  },
  {
-  "name": "Ghost Harmonium",
+  "name": "Ghost Music Box",
   "cat": "Keys & Bells",
   "tags": [
    "Cinematic",
@@ -3644,7 +3644,7 @@
   }
  },
  {
-  "name": "Omenwing Harmonium",
+  "name": "Omenwing Celesta",
   "cat": "Keys & Bells",
   "tags": [
    "Cinematic",
@@ -3689,7 +3689,7 @@
   }
  },
  {
-  "name": "Ember Clocktower",
+  "name": "Ember Organ",
   "cat": "Keys & Bells",
   "tags": [
    "Rock",
@@ -3705,7 +3705,7 @@
   }
  },
  {
-  "name": "Stormvein Carillon",
+  "name": "Stormvein Marimba",
   "cat": "Keys & Bells",
   "tags": [
    "Cinematic",
@@ -3721,7 +3721,7 @@
   }
  },
  {
-  "name": "Oakforge Carillon",
+  "name": "Oakforge Chime",
   "cat": "Keys & Bells",
   "tags": [
    "Ambient",
@@ -3736,7 +3736,7 @@
   }
  },
  {
-  "name": "Warp Glockenspiel",
+  "name": "Warp Keys",
   "cat": "Keys & Bells",
   "tags": [
    "Rock",
@@ -3842,7 +3842,7 @@
   }
  },
  {
-  "name": "Thornhold Belfry",
+  "name": "Thornhold Hammers",
   "cat": "Keys & Bells",
   "tags": [
    "Rock",
@@ -4029,7 +4029,7 @@
   }
  },
  {
-  "name": "Psychic Strings",
+  "name": "Psychic Ripple",
   "cat": "Plucks",
   "tags": [
    "Cinematic",
@@ -4105,7 +4105,7 @@
   }
  },
  {
-  "name": "Quasar Strings",
+  "name": "Quasar Needle",
   "cat": "Plucks",
   "tags": [
    "Rock",
@@ -4182,7 +4182,7 @@
   }
  },
  {
-  "name": "Banshee Zither",
+  "name": "Banshee Thread",
   "cat": "Plucks",
   "tags": [
    "Metal",
@@ -4303,7 +4303,7 @@
   }
  },
  {
-  "name": "Lyre of the Void",
+  "name": "Prism of the Void",
   "cat": "Plucks",
   "tags": [
    "Prog",
@@ -4365,7 +4365,7 @@
   }
  },
  {
-  "name": "Dreadgate Harp",
+  "name": "Dreadgate Droplet",
   "cat": "Plucks",
   "tags": [
    "Metal",
@@ -4427,7 +4427,7 @@
   }
  },
  {
-  "name": "Silver Lute",
+  "name": "Silver Pluck",
   "cat": "Plucks",
   "tags": [
    "Rock",
@@ -5260,7 +5260,7 @@
   }
  },
  {
-  "name": "Mythic Fanfare",
+  "name": "Mythic Strings",
   "cat": "Brass & Strings",
   "tags": [
    "Rock",
@@ -5291,7 +5291,7 @@
   }
  },
  {
-  "name": "Ashshard Fanfare",
+  "name": "Ashshard Strings",
   "cat": "Brass & Strings",
   "tags": [
    "Cinematic",
@@ -5443,7 +5443,7 @@
   }
  },
  {
-  "name": "Ancient Fanfare",
+  "name": "Ancient Strings",
   "cat": "Brass & Strings",
   "tags": [
    "Prog",
@@ -5595,7 +5595,7 @@
   }
  },
  {
-  "name": "Derelict Bows",
+  "name": "Derelict Horns",
   "cat": "Brass & Strings",
   "tags": [
    "Prog",
@@ -5687,7 +5687,7 @@
   }
  },
  {
-  "name": "Grail Bows",
+  "name": "Grail Horns",
   "cat": "Brass & Strings",
   "tags": [
    "Cinematic",
@@ -5854,7 +5854,7 @@
   }
  },
  {
-  "name": "Plague Monks",
+  "name": "Plague Lament",
   "cat": "Choirs & Voices",
   "tags": [
    "Cinematic",
@@ -5884,7 +5884,7 @@
   }
  },
  {
-  "name": "Druid Litany",
+  "name": "Druid Lament",
   "cat": "Choirs & Voices",
   "tags": [
    "Prog",
@@ -5900,7 +5900,7 @@
   }
  },
  {
-  "name": "Witchwood Psalm",
+  "name": "Witchwood Sirens",
   "cat": "Choirs & Voices",
   "tags": [
    "Cinematic",
@@ -5991,7 +5991,7 @@
   }
  },
  {
-  "name": "Night Sirens",
+  "name": "Night Whispers",
   "cat": "Choirs & Voices",
   "tags": [
    "Cinematic",
@@ -6006,7 +6006,7 @@
   }
  },
  {
-  "name": "Shade Hymn",
+  "name": "Shade Whispers",
   "cat": "Choirs & Voices",
   "tags": [
    "Cinematic",
@@ -6021,7 +6021,7 @@
   }
  },
  {
-  "name": "Thorn Choir",
+  "name": "Thorn Sirens",
   "cat": "Choirs & Voices",
   "tags": [
    "Prog",
@@ -6036,7 +6036,7 @@
   }
  },
  {
-  "name": "Warden Choir",
+  "name": "Warden Sirens",
   "cat": "Choirs & Voices",
   "tags": [
    "Prog",
@@ -6052,7 +6052,7 @@
   }
  },
  {
-  "name": "Warden Plainsong",
+  "name": "Warden Chorus",
   "cat": "Choirs & Voices",
   "tags": [
    "Cinematic",
@@ -6067,7 +6067,7 @@
   }
  },
  {
-  "name": "Monks of the Forgotten",
+  "name": "Hymn of the Forgotten",
   "cat": "Choirs & Voices",
   "tags": [
    "Cinematic",
@@ -6127,7 +6127,7 @@
   }
  },
  {
-  "name": "Bone Monks",
+  "name": "Bone Whispers",
   "cat": "Choirs & Voices",
   "tags": [
    "Cinematic",
@@ -6142,7 +6142,7 @@
   }
  },
  {
-  "name": "Wraithwake Chant",
+  "name": "Wraithwake Lament",
   "cat": "Choirs & Voices",
   "tags": [
    "Cinematic",
@@ -6203,7 +6203,7 @@
   }
  },
  {
-  "name": "Sirens of Iron Hills",
+  "name": "Choir of Iron Hills",
   "cat": "Choirs & Voices",
   "tags": [
    "Cinematic",

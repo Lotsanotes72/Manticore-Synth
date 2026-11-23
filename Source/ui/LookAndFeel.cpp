@@ -109,6 +109,23 @@ void McLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int w, in
     g.setColour (enabled ? col::amber : col::dim);
     g.drawLine (c.x + kr * 0.25f * std::sin (ang), c.y - kr * 0.25f * std::cos (ang),
                 c.x + kr * 0.92f * std::sin (ang), c.y - kr * 0.92f * std::cos (ang), juce::jmax (1.5f, 2.4f * s));
+
+    // Haunt: a pale ghost pointer shows where the control has drifted (the stored value does not move)
+    const float ghost = (float) sl.getProperties().getWithDefault ("ghost", 0.0f);
+    const float gp = juce::jlimit (0.0f, 1.0f, pos + ghost);
+    if (std::abs (gp - pos) > 0.003f && enabled)
+    {
+        const float ga = a0 + gp * (a1 - a0);
+        juce::Path arc;
+        arc.addCentredArc (c.x, c.y, tr, tr, 0.0f, juce::jmin (ang, ga), juce::jmax (ang, ga), true);
+        g.setColour (col::ghost.withAlpha (0.55f));
+        g.strokePath (arc, juce::PathStrokeType (juce::jmax (1.0f, 1.6f * s)));
+        g.setColour (col::ghost.withAlpha (0.9f));
+        g.drawLine (c.x + kr * 0.45f * std::sin (ga), c.y - kr * 0.45f * std::cos (ga),
+                    c.x + r * 0.98f * std::sin (ga), c.y - r * 0.98f * std::cos (ga), juce::jmax (1.2f, 1.8f * s));
+        const float d = juce::jmax (3.0f, 4.0f * s);
+        g.fillEllipse (c.x + tr * std::sin (ga) - d * 0.5f, c.y - tr * std::cos (ga) - d * 0.5f, d, d);
+    }
 }
 
 void McLookAndFeel::drawLinearSlider (juce::Graphics& g, int x, int y, int w, int h, float pos, float, float,
@@ -386,5 +403,30 @@ void drawStar (juce::Graphics& g, juce::Rectangle<float> r, bool filled, juce::C
     g.setColour (c);
     if (filled) g.fillPath (p);
     else g.strokePath (p, juce::PathStrokeType (juce::jmax (1.0f, R * 0.12f), juce::PathStrokeType::mitered));
+}
+
+void drawPadlock (juce::Graphics& g, juce::Rectangle<float> r, bool closed, juce::Colour c)
+{
+    const float sz = juce::jmin (r.getWidth(), r.getHeight());
+    auto b = r.withSizeKeepingCentre (sz * 0.78f, sz);
+    auto body = b.removeFromBottom (sz * 0.56f);
+    const float th = juce::jmax (1.2f, sz * 0.11f);
+    juce::Path shackle;
+    const float sw = body.getWidth() * 0.62f, sx = body.getCentreX() - sw * 0.5f;
+    const float top = b.getY() + th * 0.5f, bottom = body.getY() + th * 0.2f;
+    const float lift = closed ? 0.0f : sz * 0.16f;
+    shackle.startNewSubPath (sx, bottom - (closed ? 0.0f : sz * 0.05f));
+    shackle.lineTo (sx, top + sw * 0.5f - lift);
+    shackle.addCentredArc (sx + sw * 0.5f, top + sw * 0.5f - lift, sw * 0.5f, sw * 0.5f, 0.0f, -juce::MathConstants<float>::halfPi,
+                           juce::MathConstants<float>::halfPi, false);
+    if (closed) shackle.lineTo (sx + sw, bottom);
+    else shackle.lineTo (sx + sw, top + sw * 0.5f - lift + sz * 0.08f);
+    g.setColour (c);
+    g.strokePath (shackle, juce::PathStrokeType (th, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
+    if (closed) g.fillRoundedRectangle (body, sz * 0.08f);
+    else g.drawRoundedRectangle (body.reduced (th * 0.5f), sz * 0.08f, th);
+    g.setColour (closed ? col::bg : c);
+    const float kh = body.getHeight() * 0.36f;
+    g.fillRoundedRectangle (body.getCentreX() - th * 0.5f, body.getCentreY() - kh * 0.5f, th, kh, th * 0.5f);
 }
 }

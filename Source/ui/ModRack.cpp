@@ -80,8 +80,12 @@ void MatrixPanel::resized()
 }
 
 // ======================================================================= ModRack
-ModRack::ModRack (Ctx& c) : ctx (c), editor (c, true), matrix (c)
+ModRack::ModRack (Ctx& c) : ctx (c), editor (c, true), matrix (c),
+    modLock (c.proc, kLockMod, "Modulators", "keeps all envelopes, LFOs, MSEGs, mappers and mod math as they are."),
+    mtxLock (c.proc, kLockMatrix, "Matrix", "keeps the 24 matrix routings and their amounts (Haunt won't drift the amounts either).")
 {
+    addAndMakeVisible (modLock);
+    addAndMakeVisible (mtxLock);
     const char* fam[] { "ENV", "LFO", "MSEG", "MAP", "MATH", "MATRIX" };
     const Kind kinds[] { Kind::Env, Kind::Lfo, Kind::Mseg, Kind::Map, Kind::Math, Kind::Count };
     const char* tips[] { "Envelopes (ENV 1 is the amp envelope).", "Low frequency oscillators.", "Multi-segment envelopes you draw yourself.",
@@ -159,6 +163,9 @@ void ModRack::resized()
     for (auto* f : fams) f->setBounds (head.removeFromLeft (f->getButtonText() == "MATRIX" ? S (78) : S (62)).withTrimmedRight (S (4)));
     head.removeFromLeft (S (18));
     for (auto* n : nums) n->setBounds (head.removeFromLeft (S (34)).withTrimmedRight (S (4)));
+    mtxLock.setBounds (head.removeFromRight (mtxLock.preferredWidth (s)).reduced (0, S (3)));
+    head.removeFromRight (S (16));
+    modLock.setBounds (head.removeFromRight (modLock.preferredWidth (s)).reduced (0, S (3)));
     r.removeFromTop (S (6));
     editor.setBounds (r.expanded (S (12), S (8)).withTrimmedTop (S (8)));
     matrix.setBounds (r);

@@ -64,12 +64,58 @@ juce::String whereIs (APVTS& s, Kind k, int inst)
 }
 }
 
+// ======================================================================= LockButton
+LockButton::LockButton (ManticoreProcessor& p, int b, const juce::String& l, const juce::String& what)
+    : juce::Button ("lock"), proc (p), bit (b), label (l)
+{
+    setTooltip ("Padlock: " + what + " Mutate, Breed and Haunt leave a locked section alone.");
+    setMouseCursor (juce::MouseCursor::PointingHandCursor);
+}
+
+int LockButton::preferredWidth (float s) const
+{
+    const int icon = juce::roundToInt (18 * s);
+    if (label.isEmpty()) return icon;
+    return icon + juce::roundToInt (6 * s) + juce::roundToInt (juce::GlyphArrangement::getStringWidth (Fonts::label (12.5f * s), label.toUpperCase()));
+}
+
+void LockButton::paintButton (juce::Graphics& g, bool over, bool)
+{
+    const float s = scaleOf (*this);
+    const bool on = proc.isLocked (bit);
+    const auto c = on ? col::amber : (over ? col::text : col::faint.brighter (0.35f));
+    auto r = getLocalBounds().toFloat();
+    const float icon = juce::jmin (r.getHeight(), 18.0f * s);
+    drawPadlock (g, r.removeFromLeft (icon).withSizeKeepingCentre (icon * 0.82f, icon * 0.82f), on, c);
+    if (label.isNotEmpty())
+    {
+        r.removeFromLeft (5.0f * s);
+        g.setFont (Fonts::label (12.5f * s));
+        g.setColour (c);
+        g.drawText (label.toUpperCase(), r, juce::Justification::centredLeft);
+    }
+}
+
+void LockButton::clicked()
+{
+    proc.setLocked (bit, ! proc.isLocked (bit));
+    repaint();
+}
+
 // ======================================================================= ModuleEditor
 ModuleEditor::ModuleEditor (Ctx& c, bool wd) : ctx (c), withDisplay (wd), display (c.proc, c.live), mseg (c.proc, c.live), mapEd (c.proc, c.live)
 {
     addChildComponent (display);
     addChildComponent (mseg);
     addChildComponent (mapEd);
+    addChildComponent (mutBtn);
+    mutBtn.onClick = [this]
+    {
+        if (kind == Kind::Count) return;
+        juce::String msg;
+        ctx.proc.mutateModule (kind, inst, msg);
+        ctx.status (msg, 90);
+    };
 }
 
 void ModuleEditor::setModule (Kind k, int i)
@@ -113,6 +159,7 @@ void ModuleEditor::setModule (Kind k, int i)
             knobLocals.push_back (local);
         }
     }
+    mutBtn.setVisible (true);
     display.setVisible (withDisplay && k != Kind::Mseg && k != Kind::Map);
     mseg.setVisible (withDisplay && k == Kind::Mseg);
     mapEd.setVisible (withDisplay && k == Kind::Map);
@@ -191,7 +238,8 @@ void ModuleEditor::paint (juce::Graphics& g)
     {
         const auto where = whereIs (ctx.proc.apvts, kind, inst);
         g.setColour (where.isEmpty() ? col::red.withAlpha (0.85f) : col::teal.withAlpha (0.8f));
-        g.drawText (where.isEmpty() ? juce::String ("NOT IN THE GRID - right-click a slot to place it") : where, t, juce::Justification::centredRight);
+        g.drawText (where.isEmpty() ? juce::String ("NOT IN THE GRID - right-click a slot to place it") : where,
+                    t.withRight (mutBtn.getX() - juce::roundToInt (12 * s)), juce::Justification::centredRight);
     }
     // captions over the choice boxes
     for (auto& c : tops)
@@ -206,6 +254,7 @@ void ModuleEditor::resized()
     auto S = [s] (float v) { return juce::roundToInt (v * s); };
     auto r = getLocalBounds().reduced (S (12), S (8));
     titleArea = r.removeFromTop (S (26));
+    mutBtn.setBounds (titleArea.withLeft (titleArea.getRight() - S (78)).reduced (0, S (1)));
     r.removeFromTop (S (6));
     if (kind == Kind::Count) return;
     if (withDisplay)
@@ -372,7 +421,6 @@ void SlotTile::showMenu()
         if (safe == nullptr || r == 0) return;
         auto& st = safe->ctx.proc.apvts;
         const int e = r - 1;
-        safe->ctx.proc.undo.beginNewTransaction ("Grid");
         if (e > 0 && usedPid[(size_t) e].isNotEmpty()) setParam (st, usedPid[(size_t) e], 0);
         setParam (st, safe->pid, (float) e);
         if (e > 0)
@@ -397,6 +445,14 @@ GridPanel::GridPanel (Ctx& c, bool f) : ctx (c), fx (f)
             cb->attach (ctx.proc.apvts, id::lane (l, "in"));
             addAndMakeVisible (cb);
         }
+    if (fx) locks.add (new LockButton (ctx.proc, kLockFx, "Effects", "keeps the effect chains, effect settings and aux returns as they are."));
+    else
+    {
+        locks.add (new LockButton (ctx.proc, kLockGrid, "Layout", "keeps every module in its slot (and the lane inputs), so Mutate and Breed can't move, add or remove modules."));
+        for (int l = 0; l < 4; ++l)
+            locks.add (new LockButton (ctx.proc, kLockLane1 + l, {}, "keeps the settings of the modules in Lane " + juce::String (l + 1) + " and its mixer controls."));
+    }
+    for (auto* b : locks) addAndMakeVisible (b);
 }
 
 void GridPanel::tick (Kind selKind, int selInst)
@@ -458,6 +514,15 @@ void GridPanel::resized()
     for (int l = 0; l < 4; ++l)
         for (int sl = 0; sl < 4; ++sl)
             tiles[l * 4 + sl]->setBounds (r.getX() + l * cw, r.getY() + sl * ch, cw, ch - S (6));
+    // padlocks: the section lock at the right of the title, lane locks beside the lane captions
+    auto title = getLocalBounds().reduced (S (12), S (8)).removeFromTop (S (20));
+    locks[0]->setBounds (title.removeFromRight (locks[0]->preferredWidth (s)).reduced (0, S (1)));
+    if (! fx)
+        for (int l = 0; l < 4; ++l)
+        {
+            const auto t = tiles[l * 4]->getBounds();
+            locks[1 + l]->setBounds (t.getRight() - S (24), t.getY() - S (45), S (18), S (18));
+        }
 }
 
 // ======================================================================= SynthPage

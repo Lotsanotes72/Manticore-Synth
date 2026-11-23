@@ -1,6 +1,6 @@
 ; Inno Setup script for Manticore (Fellowship of the String)
 #define AppName "Manticore"
-#define AppVersion "1.0.0"
+#define AppVersion "1.1.0"
 #define Publisher "Fellowship of the String"
 #define Build "..\build\Manticore_artefacts\Release"
 

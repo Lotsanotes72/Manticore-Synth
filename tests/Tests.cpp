@@ -278,6 +278,273 @@ static void unitTests()
     }
 }
 
+
+// ------------------------------------------------------------------ Mutate / Breed / Haunt / XY
+static int countDiff (const Patch& a, const Patch& b, std::function<bool (int)> filter = nullptr)
+{
+    int n = 0;
+    for (int i = 0; i < (int) a.v.size(); ++i)
+        if ((! filter || filter (i)) && std::abs (a.v[(size_t) i] - b.v[(size_t) i]) > 1e-5f * (1.0f + std::abs (a.v[(size_t) i]))) ++n;
+    return n;
+}
+
+static void evolveTests (bool heavy)
+{
+    auto& bank = PresetBank::get();
+    const auto& defs = params();
+    const auto& pcs = paramClasses();
+    auto pitchOrMacro = [&] (int i)
+    {
+        const auto& d = defs[(size_t) i];
+        return d.caption == "Tune" && d.kind != Kind::Ring ? true : d.caption == "Fine" || pcs[(size_t) i].group == PGroup::Macro
+            || d.id == id::transpose || d.id == id::arpOn;
+    };
+    {
+        std::cout << "Mutate\n";
+        ManticoreProcessor p;
+        p.loadFactoryPreset (bank.findFactory ("Wyrmglass Cathedral") >= 0 ? bank.findFactory ("Wyrmglass Cathedral") : 10);
+        const auto before = p.currentPatch();
+        const auto lb = p.measure (before);
+        juce::String msg;
+        p.setMutateStrength (0.5f);
+        CHECK (p.mutate (msg), "mutate succeeds: " + msg);
+        const auto after = p.currentPatch();
+        CHECK (countDiff (before, after) > 5, "mutate changed " + juce::String (countDiff (before, after)) + " parameters");
+        CHECK (countDiff (before, after, pitchOrMacro) == 0, "pitch, macros, transpose and arp on/off untouched");
+        const auto la = p.measure (after);
+        CHECK (la.audible() && std::abs (la.loud - lb.loud) < 2.0f, "level matched (" + juce::String (lb.loud, 1) + " -> " + juce::String (la.loud, 1) + " dB)");
+        CHECK (p.currentPresetName().endsWith ("~1"), "name gets a mutation marker: " + p.currentPresetName());
+        CHECK (p.mutate (msg) && p.currentPresetName().endsWith ("~2"), "second mutation counts up: " + p.currentPresetName());
+        // undo / redo
+        p.undo(); p.undo();
+        CHECK (countDiff (before, p.currentPatch()) == 0, "two undos restore the preset");
+        p.redo();
+        CHECK (countDiff (after, p.currentPatch()) == 0, "redo restores the first mutation");
+    }
+    {
+        std::cout << "Padlocks\n";
+        ManticoreProcessor p;
+        p.loadFactoryPreset (40);
+        for (int b = 0; b < kNumLocks; ++b) p.setLocked (b, b != kLockMod);
+        const auto before = p.currentPatch();
+        juce::String msg;
+        p.setMutateStrength (0.9f);
+        p.mutate (msg);
+        const auto after = p.currentPatch();
+        const int modChanged = countDiff (before, after, [&] (int i) { return pcs[(size_t) i].group == PGroup::ModModule; });
+        const int other = countDiff (before, after, [&] (int i)
+        {
+            const auto g = pcs[(size_t) i].group;
+            return g != PGroup::ModModule && ! defs[(size_t) i].id.endsWith ("_vol") && defs[(size_t) i].id != id::master;
+        });
+        CHECK (modChanged > 0, "unlocked modulators changed (" + juce::String (modChanged) + ")");
+        CHECK (other == 0, "everything locked stayed put (" + juce::String (other) + " changed)");
+        // the layout lock keeps every slot
+        ManticoreProcessor q;
+        q.loadFactoryPreset (77);
+        q.setLocked (kLockGrid, true);
+        q.setMutateStrength (1.0f);
+        const auto qb = q.currentPatch();
+        for (int k = 0; k < 6; ++k) q.mutate (msg);
+        const int slots = countDiff (qb, q.currentPatch(), [&] (int i) { auto g = pcs[(size_t) i].group; return g == PGroup::Slot || g == PGroup::LaneIn; });
+        CHECK (slots == 0, "Layout padlock: no module moved after 6 strong mutations");
+    }
+    {
+        std::cout << "Mutate one module\n";
+        ManticoreProcessor p;
+        p.loadFactoryPreset (5);
+        const auto before = p.currentPatch();
+        juce::String msg;
+        p.setMutateStrength (0.7f);
+        p.mutateModule (Kind::Env, 1, msg);
+        const auto after = p.currentPatch();
+        const int inMod = countDiff (before, after, [&] (int i) { return defs[(size_t) i].kind == Kind::Env && defs[(size_t) i].inst == 1; });
+        const int outside = countDiff (before, after, [&] (int i)
+        {
+            return ! (defs[(size_t) i].kind == Kind::Env && defs[(size_t) i].inst == 1) && ! defs[(size_t) i].id.endsWith ("_vol") && defs[(size_t) i].id != id::master;
+        });
+        CHECK (inMod > 0 && outside == 0, "only ENV 2 changed (" + juce::String (inMod) + " inside, " + juce::String (outside) + " outside)");
+    }
+    {
+        std::cout << "Breed\n";
+        ManticoreProcessor p;
+        const int ia = bank.findFactory ("Phantom Tapestry") >= 0 ? bank.findFactory ("Phantom Tapestry") : 20;
+        const int ib = bank.findFactory ("Kingsbane Mallets") >= 0 ? bank.findFactory ("Kingsbane Mallets") : 300;
+        p.loadFactoryPreset (ia);
+        const auto A = p.currentPatch();
+        const auto la = p.measure (A);
+        p.abSelect (1);
+        p.loadFactoryPreset (ib);
+        const auto B = p.currentPatch();
+        const auto lbb = p.measure (B);
+        juce::String msg;
+        CHECK (p.breed (msg), "breed succeeds: " + msg);
+        const auto C = p.currentPatch();
+        CHECK (countDiff (C, A) > 10 && countDiff (C, B) > 10, "child differs from both parents");
+        const auto lc = p.measure (C);
+        CHECK (lc.audible() && std::abs (lc.loud - 0.5f * (la.loud + lbb.loud)) < 2.5f, "child level near the parents' average ("
+               + juce::String (lc.loud, 1) + " vs " + juce::String (0.5f * (la.loud + lbb.loud), 1) + ")");
+        CHECK (p.abCurrent() == 1, "child sits in the current slot");
+        std::cout << "    child name: " << p.currentPresetName() << "\n";
+        // duplicates in the child grid are never inactive
+        GridMap gm; gm.build (C.v.data());
+        int placed = 0, dup = 0;
+        bool seen[64] {};
+        for (int l = 0; l < kNumLanes; ++l)
+            for (int s = 0; s < kNumSlots; ++s)
+            {
+                const int e = juce::roundToInt (C.v[(size_t) paramIndex (id::slot (l, s))]);
+                if (e <= 0) continue;
+                ++placed;
+                if (seen[e]) ++dup;
+                seen[e] = true;
+            }
+        CHECK (placed > 0 && dup == 0, "child grid: " + juce::String (placed) + " modules, no duplicates");
+        // locked section comes from the current sound
+        p.setLocked (kLockFx, true);
+        const auto cur = p.currentPatch();
+        p.breed (msg);
+        const int fxd = countDiff (cur, p.currentPatch(), [&] (int i) { auto g = pcs[(size_t) i].group; return g == PGroup::FxModule || g == PGroup::FxSlot || g == PGroup::AuxRet; });
+        CHECK (fxd == 0, "Effects padlock: effects kept from the current sound");
+        // same sound in both slots is refused
+        p.abCopyToOther();
+        CHECK (! p.breed (msg), "identical slots are refused");
+        CHECK (bredName ("Emberfall", "Specter Abyss") == "Emberfall Abyss", "child names come from the parents");
+    }
+    {
+        std::cout << "Haunt\n";
+        ManticoreProcessor p;
+        p.loadFactoryPreset (bank.findFactory ("Wyrmglass Cathedral") >= 0 ? bank.findFactory ("Wyrmglass Cathedral") : 10);
+        setP (p, id::mtx (0, "src"), (float) sLfo1);
+        setP (p, id::mtx (0, "dst"), (float) destOfParam (pidx (Kind::Osc, 0, op::wave)));
+        setP (p, id::mtx (0, "amt"), 0.3f);
+        p.setLocked (kLockFx, true);
+        setP (p, id::hauntOn, 1.0f);
+        setP (p, id::hauntSpeed, 1.0f);
+        setP (p, id::hauntDepth, 1.0f);
+        const auto stored = p.currentPatch();
+        auto st = renderPhrase (p, 48000.0, nullptr, false);
+        CHECK (st.finite, "haunted render is finite");
+        int drifting = 0, badPitch = 0, badLocked = 0;
+        GridMap gm; gm.build (stored.v.data());
+        for (int i = 0; i < (int) defs.size(); ++i)
+        {
+            const float o = p.engine.hauntOffset (i);
+            if (o == 0.0f) continue;
+            ++drifting;
+            if (defs[(size_t) i].caption == "Tune" || defs[(size_t) i].caption == "Fine" || pcs[(size_t) i].group == PGroup::Perform) ++badPitch;
+            if (lockBitOf (i, gm) == kLockFx) ++badLocked;
+        }
+        CHECK (drifting > 20, juce::String (drifting) + " controls drifting");
+        CHECK (badPitch == 0, "pitch never drifts");
+        CHECK (badLocked == 0, "locked effects don't drift");
+        CHECK (p.engine.hauntOffset (paramIndex (id::mtx (0, "amt"))) != 0.0f, "matrix amount drifts");
+        CHECK (p.engine.hauntOffset (paramIndex (id::mtx (5, "amt"))) == 0.0f || juce::roundToInt (stored.v[(size_t) paramIndex (id::mtx (5, "src"))]) > 0,
+               "empty matrix rows don't drift");
+        CHECK (countDiff (stored, p.currentPatch()) == 0, "stored settings never move while haunting");
+        // Follow with nothing playing settles home
+        ManticoreProcessor f;
+        f.loadFactoryPreset (10);
+        setP (f, id::hauntOn, 1.0f); setP (f, id::hauntFollow, 1.0f); setP (f, id::hauntDepth, 1.0f);
+        f.prepareToPlay (48000.0, 512);
+        juce::AudioBuffer<float> buf (2, 512);
+        juce::MidiBuffer none;
+        for (int k = 0; k < 600; ++k) { buf.clear(); f.processBlock (buf, none); }
+        float maxOff = 0;
+        for (int i = 0; i < (int) defs.size(); ++i) maxOff = juce::jmax (maxOff, std::abs (f.engine.hauntOffset (i)) / juce::jmax (0.1f, pcs[(size_t) i].hauntScale));
+        CHECK (maxOff < 0.04f, "Follow with no notes keeps the drift small (" + juce::String (maxOff, 3) + ")");
+        // Capture
+        juce::String msg;
+        CHECK (p.capture (msg), "capture: " + msg);
+        CHECK (countDiff (stored, p.currentPatch()) > 10 && ! p.isHaunting(), "capture wrote the drift and turned Haunt off");
+        // presets keep Haunt settings
+        setP (p, id::hauntOn, 1.0f);
+        p.loadFactoryPreset (3);
+        CHECK (p.isHaunting(), "loading a preset keeps Haunt running");
+        p.undo();
+        CHECK (p.isHaunting(), "undo keeps Haunt running");
+    }
+    {
+        std::cout << "XY pads\n";
+        ManticoreProcessor p;
+        p.loadInit();
+        setP (p, pid (Kind::Vcf, 0, vp::cutoff), 300.0f);
+        setP (p, id::xyTarget (0, 0, 0, "dst"), (float) destOfParam (pidx (Kind::Vcf, 0, vp::cutoff)));
+        setP (p, id::xyTarget (0, 0, 0, "amt"), 0.8f);
+        auto bright = [&] (float x)
+        {
+            setP (p, id::xyPos (0, 0), x);
+            juce::AudioBuffer<float> b;
+            renderPhrase (p, 48000.0, &b, false);
+            double e = 0, d = 0;
+            for (int i = 4800; i < 60000; ++i)
+            {
+                const double x = b.getSample (0, i), dx = x - b.getSample (0, i - 1);
+                e += x * x; d += dx * dx;
+            }
+            return (float) std::sqrt (d / juce::jmax (1e-12, e));      // rises with brightness
+        };
+        const float c0 = bright (0.5f), c1 = bright (1.0f);
+        setP (p, id::xyPos (0, 0), 0.5f);
+        setP (p, pid (Kind::Vcf, 0, vp::cutoff), 20000.0f);
+        const float open = bright (0.5f);
+        setP (p, pid (Kind::Vcf, 0, vp::cutoff), 300.0f);
+        CHECK (c1 > c0 * 1.1f && std::abs (c1 - open) < 0.03f * open, "XY 1 X at the edge opens the filter like turning the knob ("
+               + juce::String (c0, 4) + " -> " + juce::String (c1, 4) + ", open " + juce::String (open, 4) + ")");
+        // XY as a matrix source on an effect
+        setP (p, id::fxSlot (0, 0), (float) fxEntryOf (Kind::FxFilter, 0));
+        setP (p, id::mtx (0, "src"), (float) sXY2Y);
+        setP (p, id::mtx (0, "dst"), (float) destOfParam (pidx (Kind::FxFilter, 0, ffp::cutoff)));
+        setP (p, id::mtx (0, "amt"), -0.9f);
+        setP (p, id::xyPos (1, 1), 1.0f);
+        auto st = renderPhrase (p, 48000.0, nullptr, false);
+        CHECK (st.finite && st.peak > 0.01f, "XY source on an effect renders");
+    }
+    if (heavy)
+    {
+        std::cout << "Mutate / Breed sweep across presets\n";
+        juce::Random r (7);
+        int tried = 0, ok = 0, audible = 0;
+        double sumDev = 0, maxDev = 0, ms = 0;
+        for (int k = 0; k < 60; ++k)
+        {
+            ManticoreProcessor p;
+            const int idx = r.nextInt (bank.numFactory());
+            p.loadFactoryPreset (idx);
+            const auto lb = p.measure (p.currentPatch());
+            p.setMutateStrength (k % 3 == 0 ? 0.2f : k % 3 == 1 ? 0.5f : 0.9f);
+            juce::String msg;
+            const auto t0 = juce::Time::getMillisecondCounterHiRes();
+            bool done;
+            if (k % 4 == 3)
+            {
+                p.abSelect (1);
+                p.loadFactoryPreset (r.nextInt (bank.numFactory()));
+                done = p.breed (msg);
+            }
+            else done = p.mutate (msg);
+            ms += juce::Time::getMillisecondCounterHiRes() - t0;
+            ++tried;
+            if (! done) { std::cout << "    failed on " << bank.factory()[(size_t) idx].name << ": " << msg << "\n"; continue; }
+            ++ok;
+            const auto la = p.measure (p.currentPatch());
+            if (la.audible()) ++audible;
+            if (k % 4 != 3 && lb.audible() && la.audible())
+            {
+                const double dev = std::abs (la.loud - lb.loud);
+                if (dev > 2.5) std::cout << "    level " << juce::String (lb.loud, 1) << " -> " << juce::String (la.loud, 1) << " peak " << juce::String (la.peak, 2)
+                                         << " master " << juce::String (p.currentPatch().v[(size_t) paramIndex (id::master)], 1) << "  " << bank.factory()[(size_t) idx].name << "\n";
+                sumDev += dev; maxDev = juce::jmax (maxDev, dev);
+            }
+        }
+        std::cout << "    " << ok << "/" << tried << " succeeded, " << audible << " audible, mean level error "
+                  << juce::String (sumDev / juce::jmax (1, ok - 15), 2) << " dB, max " << juce::String (maxDev, 2) << " dB, "
+                  << juce::String (ms / tried, 0) << " ms per press\n";
+        CHECK (ok >= tried - 2 && audible == ok, "sweep: playable results");
+        CHECK (maxDev < 4.0, "sweep: level stays matched");
+    }
+}
+
 static void renderPresets (const juce::File& outJson, const juce::File& wavDir)
 {
     auto& bank = PresetBank::get();
@@ -323,6 +590,34 @@ static void screenshots (const juce::File& dir, float scale, const juce::File& l
         ManticoreProcessor p;
         const int idx = PresetBank::get().findFactory (f[0]);
         if (idx >= 0) p.loadFactoryPreset (idx); else p.loadInit();
+        const juce::String flags = f.size() > 7 ? f[7] : juce::String();
+        if (flags.contains ("locks"))
+            for (int b : { (int) kLockGrid, (int) kLockLane1 + 1, (int) kLockMod }) p.setLocked (b, true);
+        if (flags.contains ("xydemo"))
+        {
+            auto dst = [&] (Kind k, int i, int l) { return (float) destOfParam (pidx (k, i, l)); };
+            setP (p, id::xyTarget (0, 0, 0, "dst"), dst (Kind::Vcf, 0, vp::cutoff)); setP (p, id::xyTarget (0, 0, 0, "amt"), 0.55f);
+            setP (p, id::xyTarget (0, 0, 1, "dst"), dst (Kind::Osc, 0, op::wave));   setP (p, id::xyTarget (0, 0, 1, "amt"), 0.4f);
+            setP (p, id::xyTarget (0, 1, 0, "dst"), dst (Kind::Vcf, 0, vp::reso));   setP (p, id::xyTarget (0, 1, 0, "amt"), 0.35f);
+            setP (p, id::xyTarget (0, 1, 1, "dst"), dst (Kind::Osc, 0, op::uniDetune)); setP (p, id::xyTarget (0, 1, 1, "amt"), -0.3f);
+            setP (p, id::xyTarget (1, 0, 0, "dst"), dst (Kind::Osc, 1, op::fx1Amt));  setP (p, id::xyTarget (1, 0, 0, "amt"), 0.7f);
+            setP (p, id::xyTarget (1, 1, 0, "dst"), dst (Kind::Env, 0, envp::release)); setP (p, id::xyTarget (1, 1, 0, "amt"), 0.25f);
+            setP (p, id::xyPos (0, 0), 0.72f); setP (p, id::xyPos (0, 1), 0.64f);
+            setP (p, id::xyPos (1, 0), 0.30f); setP (p, id::xyPos (1, 1), 0.58f);
+        }
+        if (flags.contains ("haunt"))
+        {
+            setP (p, id::hauntOn, 1.0f); setP (p, id::hauntDepth, 0.9f); setP (p, id::hauntSpeed, 0.9f);
+            p.prepareToPlay (48000.0, 512);
+            juce::AudioBuffer<float> buf (2, 512);
+            for (int k = 0; k < 400; ++k)
+            {
+                buf.clear();
+                juce::MidiBuffer m;
+                if (k == 0) for (int n : { 48, 55, 60 }) m.addEvent (juce::MidiMessage::noteOn (1, n, (juce::uint8) 100), 0);
+                p.processBlock (buf, m);
+            }
+        }
         std::unique_ptr<ManticoreEditor> ed (dynamic_cast<ManticoreEditor*> (p.createEditor()));
         const float sc = f.size() > 6 ? f[6].getFloatValue() : scale;
         ed->setSize ((int) (ManticoreEditor::kBaseW * sc), (int) (ManticoreEditor::kBaseH * sc));
@@ -330,6 +625,7 @@ static void screenshots (const juce::File& dir, float scale, const juce::File& l
         ed->selectModule ((Kind) f[2].getIntValue(), f[3].getIntValue());
         ed->selectModTab (f[4].getIntValue());
         for (auto* c : ed->getChildren()) c->resized();
+        if (flags.contains ("haunt") || flags.contains ("tick")) ed->tickForTests();
         auto img = ed->createComponentSnapshot (ed->getLocalBounds(), true, 1.0f);
         juce::FileOutputStream os (dir.getChildFile (f[5] + ".png"));
         os.setPosition (0); os.truncate();
@@ -359,10 +655,33 @@ int main (int argc, char** argv)
     juce::ScopedJuceInitialiser_GUI init;
     const juce::String cmd = argc > 1 ? argv[1] : "unit";
     if (cmd == "params") dumpParams (juce::File (argv[2]));
-    else if (cmd == "unit") { unitTests(); std::cout << (failures == 0 ? "ALL PASSED\n" : juce::String (failures) + " FAILURES\n"); }
+    else if (cmd == "evolve") { evolveTests (true); std::cout << (failures == 0 ? "ALL PASSED\n" : juce::String (failures) + " FAILURES\n"); }
+    else if (cmd == "unit") { unitTests(); evolveTests (false); std::cout << (failures == 0 ? "ALL PASSED\n" : juce::String (failures) + " FAILURES\n"); }
     else if (cmd == "render") renderPresets (juce::File (argv[2]), argc > 3 ? juce::File (argv[3]) : juce::File());
     else if (cmd == "gui") screenshots (juce::File (argv[2]), 1.0f, juce::File (argv[3]));
     else if (cmd == "cpu") cpuTest();
+    else if (cmd == "meas")
+    {
+        auto& bank = PresetBank::get();
+        juce::Random r (7);
+        for (int k = 0; k < 12; ++k)
+        {
+            ManticoreProcessor p;
+            const int idx = r.nextInt (bank.numFactory());
+            p.loadFactoryPreset (idx);
+            auto base = p.currentPatch();
+            auto m1 = p.measure (base), m2 = p.measure (base);
+            Patch c = base;
+            MutateOptions o; o.strength = 0.9f;
+            mutatePatch (c, o, r);
+            auto lc = p.measure (c);
+            Patch c2 = c;
+            p.levelMatch (c2, m1.loud, lc);
+            auto l2 = p.measure (c2);
+            std::cout << bank.factory()[(size_t) idx].name << ": base " << m1.loud << " / " << m2.loud << "  cand " << lc.loud << " pk " << lc.peak
+                      << "  matched " << l2.loud << " master " << c2.v[(size_t) paramIndex (id::master)] << "\n";
+        }
+    }
     else if (cmd == "one")
     {
         ManticoreProcessor p;

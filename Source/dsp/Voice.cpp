@@ -291,6 +291,7 @@ void Voice::computeModulators (const Shared& sh, int n, float* env1Buf)
     src[sGate] = gate ? 1.0f : 0.0f;
     src[sExpression] = sh.expression;
     src[sAlternate] = alternate;
+    for (int k = 0; k < 2 * kNumXY; ++k) src[sXY1X + k] = sh.xy[k];
     // mappers
     for (int i = 0; i < 4; ++i)
     {

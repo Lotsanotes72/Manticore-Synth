@@ -14,6 +14,8 @@ constexpr int kArpSteps = 16;
 constexpr int kMsegMaxPoints = 16;
 constexpr int kMapSteps = 32;
 constexpr int kBlock = 32;                            // control-rate block (samples)
+constexpr int kNumXY = 4, kXYTargets = 4;             // XY vector mixer: 4 pads, 4 targets per axis
+constexpr int kNumXYRows = kNumXY * 2 * kXYTargets;   // 32 XY target rows
 
 enum class Kind
 {
@@ -97,6 +99,12 @@ namespace id
     juce::String arpStep (int n, const char* what); // "arp_s1_tr"
     juce::String auxRet (int aux);                  // "aux1_ret"
     juce::String macro (int m);                     // "macro_a"
+    juce::String xyPos (int pad, int axis);         // "xy1_x"
+    juce::String xyTarget (int pad, int axis, int k, const char* what);   // "xy1_x1_dst"
+    inline const char* hauntOn = "haunt_on";
+    inline const char* hauntDepth = "haunt_depth";
+    inline const char* hauntSpeed = "haunt_speed";
+    inline const char* hauntFollow = "haunt_follow";
     inline const char* master = "master";
     inline const char* voices = "voices";
     inline const char* vmode = "vmode";
@@ -128,7 +136,9 @@ enum Src
     sNone = 0,
     sEnv1 = 1, sLfo1 = 5, sMseg1 = 9, sMap1 = 13, sMath1 = 17,
     sVelocity = 21, sKey, sModWheel, sAftertouch, sPitchBend, sMacroA, sMacroB, sMacroC, sMacroD,
-    sRandom, sGate, sExpression, sAlternate, sNumSources
+    sRandom, sGate, sExpression, sAlternate,
+    sXY1X, sXY1Y, sXY2X, sXY2Y, sXY3X, sXY3Y, sXY4X, sXY4Y,
+    sNumSources
 };
 juce::StringArray sourceNames();
 bool sourceIsGlobal (int src);                      // usable on effects

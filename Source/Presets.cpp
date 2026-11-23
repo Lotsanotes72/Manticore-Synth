@@ -34,11 +34,17 @@ PresetBank::PresetBank()
             p.author = v.hasProperty ("author") ? v["author"].toString() : juce::String ("Fellowship of the String");
             if (auto* t = v["tags"].getArray()) for (const auto& tag : *t) p.tags.add (tag.toString());
             p.factoryIndex = i++;
+            if (v.hasProperty ("was")) renamedFrom.set (v["was"].toString(), p.name);
             infos.push_back (p);
             data.push_back (v);
         }
     }
     loadFavourites();
+}
+
+juce::String PresetBank::currentName (const juce::String& name) const
+{
+    return renamedFrom.containsKey (name) ? renamedFrom[name] : name;
 }
 
 int PresetBank::findFactory (const juce::String& name) const
@@ -87,7 +93,16 @@ void PresetBank::loadFavourites()
     {
         favourites.addLines (f.loadFileAsString());
         favourites.removeEmptyStrings();
+        // factory presets renamed in an update keep their stars
+        bool migrated = false;
+        for (auto& k : favourites)
+            if (k.startsWith ("F:") && renamedFrom.containsKey (k.substring (2)))
+            {
+                k = "F:" + renamedFrom[k.substring (2)];
+                migrated = true;
+            }
         favourites.removeDuplicates (false);
+        if (migrated) saveFavourites();
     }
 }
 

@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include "../Evolve.h"
 
 namespace mc::dsp
 {
@@ -18,6 +19,16 @@ Engine::Engine()
     }
     sh.nDest = (int) destParams().size();
     gmod.assign ((size_t) sh.nDest + 2, 0.0f);
+    rawVal = sh.val;
+    hOff.assign ((size_t) np, 0.0f);
+    hauntView = std::vector<std::atomic<float>> ((size_t) np);
+    hSpeed.resize ((size_t) np);
+    for (int i = 0; i < np; ++i)
+    {
+        uint32_t h = (uint32_t) i * 2654435761u ^ 0x9e3779b9u;
+        h ^= h >> 15; h *= 2246822519u; h ^= h >> 13;
+        hSpeed[(size_t) i] = 0.55f + 0.9f * (float) (h & 0xffff) / 65535.0f;
+    }
 
     ix.master = paramIndex (id::master); ix.voices = paramIndex (id::voices); ix.vmode = paramIndex (id::vmode);
     ix.glideMode = paramIndex (id::glideMode); ix.pbUp = paramIndex (id::pbUp); ix.pbDown = paramIndex (id::pbDown);
@@ -30,6 +41,19 @@ Engine::Engine()
         ix.mtxDst[i] = paramIndex (id::mtx (i, "dst")); ix.mtxAmt[i] = paramIndex (id::mtx (i, "amt"));
     }
     for (int i = 0; i < 4; ++i) ix.lfoBase[i] = moduleBase (Kind::Lfo, i);
+    for (int n = 0; n < kNumXY; ++n)
+        for (int a = 0; a < 2; ++a)
+        {
+            ix.xyPos[n * 2 + a] = paramIndex (id::xyPos (n, a));
+            for (int k = 0; k < kXYTargets; ++k)
+            {
+                const int row = (n * 2 + a) * kXYTargets + k;
+                ix.xyDst[row] = paramIndex (id::xyTarget (n, a, k, "dst"));
+                ix.xyAmt[row] = paramIndex (id::xyTarget (n, a, k, "amt"));
+            }
+        }
+    ix.hauntOn = paramIndex (id::hauntOn); ix.hauntDepth = paramIndex (id::hauntDepth);
+    ix.hauntSpeed = paramIndex (id::hauntSpeed); ix.hauntFollow = paramIndex (id::hauntFollow);
     // default MSEG / mapper shapes
     for (int i = 0; i < 4; ++i)
     {
@@ -43,6 +67,12 @@ void Engine::bind (juce::AudioProcessorValueTreeState& s)
 {
     raw.clear();
     for (const auto& d : params()) raw.push_back (s.getRawParameterValue (d.id));
+}
+
+void Engine::bindValues (std::vector<std::atomic<float>>& v)
+{
+    raw.clear();
+    for (auto& a : v) raw.push_back (&a);
 }
 
 void Engine::prepare (double sampleRate, int maxBlock)
@@ -66,6 +96,13 @@ void Engine::reset()
     lastNote = -1;
     sustainPedal = false;
     for (auto& l : gLfo) l = LfoState();
+    // deterministic restart (the offline level measurements rely on it)
+    gRng = Rng (4242);
+    ageCounter = 0;
+    seedCounter = 1;
+    altFlip = 1.0f;
+    masterPrev = -1;
+    lastArpOn = false;
 }
 
 void Engine::setMseg (int i, const MsegData& d)
@@ -85,15 +122,28 @@ void Engine::setMap (int i, const MapData& d)
 void Engine::updateShared()
 {
     const int np = (int) raw.size();
+    for (int i = 0; i < np; ++i) rawVal[(size_t) i] = raw[(size_t) i]->load (std::memory_order_relaxed);
+    // stored values, plus Haunt's drift where it is active
     for (int i = 0; i < np; ++i)
     {
-        const float v = raw[(size_t) i]->load (std::memory_order_relaxed);
-        if (v != sh.val[(size_t) i])
+        const float v = rawVal[(size_t) i];
+        const float off = hOff[(size_t) i];
+        if (off == 0.0f)
         {
-            sh.val[(size_t) i] = v;
-            sh.norm[(size_t) i] = sh.rng[(size_t) i].convertTo0to1 (v);
+            if (v != sh.val[(size_t) i])
+            {
+                sh.val[(size_t) i] = v;
+                sh.norm[(size_t) i] = sh.rng[(size_t) i].convertTo0to1 (v);
+            }
+        }
+        else if (hauntTick || v != sh.val[(size_t) i])
+        {
+            const float n = clampf (sh.rng[(size_t) i].convertTo0to1 (v) + off, 0.0f, 1.0f);
+            sh.norm[(size_t) i] = n;
+            sh.val[(size_t) i] = sh.rng[(size_t) i].convertFrom0to1 (n);
         }
     }
+    hauntTick = false;
     if (dataDirty.load())
     {
         const juce::SpinLock::ScopedTryLockType tl (dataLock);
@@ -144,6 +194,17 @@ void Engine::updateShared()
         }
         else sh.mtx[sh.nMtx++] = { s, v, d, a };
     }
+    // XY pads: positions (bipolar) and their target rows
+    for (int k = 0; k < 2 * kNumXY; ++k) sh.xy[k] = sh.val[(size_t) ix.xyPos[k]] * 2.0f - 1.0f;
+    for (int row = 0; row < kNumXYRows; ++row)
+    {
+        const int d = sh.choice (ix.xyDst[row]);
+        const float a = sh.val[(size_t) ix.xyAmt[row]];
+        if (d <= 0 || d > (int) dp.size() || a == 0.0f) continue;
+        const int src = sXY1X + row / kXYTargets;
+        if (defs[(size_t) dp[(size_t) d - 1]].global) gSlots.push_back ({ src, 0, d, a });
+        else sh.mtx[sh.nMtx++] = { src, 0, d, a };
+    }
     for (int m = 0; m < 4; ++m) sh.macro[m] = sh.val[(size_t) ix.macro[m]];
     sh.bendUp = sh.val[(size_t) ix.pbUp];
     sh.bendDown = sh.val[(size_t) ix.pbDown];
@@ -193,6 +254,7 @@ void Engine::computeGlobalMod (const float* lfo)
                 default: break;
             }
             if (src >= sMacroA && src <= sMacroD) return sh.macro[src - sMacroA];
+            if (src >= sXY1X && src < sXY1X + 2 * kNumXY) return sh.xy[src - sXY1X];
             return 0.0f;
         };
         float v = val (s.src) * s.amt;
@@ -222,6 +284,7 @@ int Engine::findVoice (int note)
 
 void Engine::noteOn (int note, float vel)
 {
+    lastVel = vel;
     const int mode = sh.choice (ix.vmode);
     const float glide = sh.val[(size_t) ix.glide];
     const bool legatoGlideOnly = sh.choice (ix.glideMode) == 1;
@@ -311,12 +374,99 @@ void Engine::renderVoices (int from, int to)
     }
 }
 
+// ------------------------------------------------------------------ Haunt
+namespace
+{
+inline float hashNoise (uint32_t i, int64_t k)
+{
+    uint32_t h = i * 0x9E3779B1u ^ (uint32_t) k * 0x85EBCA77u ^ (uint32_t) (k >> 32) * 0xC2B2AE3Du;
+    h ^= h >> 16; h *= 0x7feb352du; h ^= h >> 15; h *= 0x846ca68bu; h ^= h >> 16;
+    return (float) (h & 0xffffff) / 8388607.5f - 1.0f;
+}
+inline float valueNoise (uint32_t i, double t)
+{
+    const double fl = std::floor (t);
+    const auto k = (int64_t) fl;
+    const float f = (float) (t - fl);
+    const float a = hashNoise (i, k), b = hashNoise (i, k + 1);
+    return a + (b - a) * f * f * (3.0f - 2.0f * f);
+}
+}
+
+void Engine::updateHaunt (int n)
+{
+    // runs before the parameters are read; uses the stored values in rawVal from the previous block for the gate
+    const bool on = rawVal[(size_t) ix.hauntOn] > 0.5f;
+    const float dt = (float) n / (float) sh.sr;
+    if (hauntSnap.exchange (false)) hauntAmt = 0.0f;
+    else hauntAmt += ((on ? 1.0f : 0.0f) - hauntAmt) * (1.0f - std::exp (-dt / 1.2f));
+    if (! on && hauntAmt < 1.0e-3f) hauntAmt = 0.0f;
+
+    // Follow: how hard you are playing (velocity of held notes, or the mod wheel)
+    bool held = false;
+    for (auto& v : voices) if (v.isActive() && v.isGateOn()) { held = true; break; }
+    const float drive = juce::jmax (held ? lastVel : 0.0f, sh.modWheel);
+    followLvl += (drive - followLvl) * (1.0f - std::exp (-dt / (drive > followLvl ? 0.35f : 2.5f)));
+
+    hauntCountdown -= n;
+    hauntElapsed += n;
+    if (hauntCountdown > 0) return;
+    const int elapsed = hauntElapsed;
+    hauntElapsed = 0;
+    hauntCountdown = juce::jmax (64, (int) (sh.sr / 200.0));        // ~5 ms control rate
+    hauntLevel.store (hauntAmt, std::memory_order_relaxed);
+
+    const int np = (int) hOff.size();
+    if (hauntAmt <= 0.0f)
+    {
+        for (int i = 0; i < np; ++i)
+            if (hOff[(size_t) i] != 0.0f) { hOff[(size_t) i] = 0.0f; hauntView[(size_t) i].store (0.0f, std::memory_order_relaxed); }
+        return;
+    }
+    hauntTick = true;
+    const float speed = rawVal[(size_t) ix.hauntSpeed];
+    const double rate = 0.03 * std::pow (40.0, (double) speed);           // noise knots per second
+    hauntTime += rate * (double) elapsed / sh.sr;
+    const bool follow = rawVal[(size_t) ix.hauntFollow] > 0.5f;
+    const float depth = rawVal[(size_t) ix.hauntDepth] * 0.3f * hauntAmt * (follow ? 0.1f + 0.9f * followLvl : 1.0f);
+    const uint32_t lk = locks.load (std::memory_order_relaxed);
+
+    GridMap gm;
+    gm.build (rawVal.data());
+    const auto& pcs = paramClasses();
+    for (int i = 0; i < np; ++i)
+    {
+        float off = 0.0f;
+        const auto& pc = pcs[(size_t) i];
+        if (pc.haunt)
+        {
+            const int bit = lockBitOf (i, gm);
+            bool ok = bit >= 0 && ! mc::locked (lk, bit);
+            // drift only routings that exist
+            if (ok && pc.group == PGroup::MtxAmt) ok = rawVal[(size_t) i] != 0.0f;
+            if (ok && pc.group == PGroup::XYAmt) ok = rawVal[(size_t) i] != 0.0f;
+            if (ok)
+            {
+                const double tt = hauntTime * hSpeed[(size_t) i] + (double) (i % 97) * 0.37;
+                const float nz = 0.75f * valueNoise ((uint32_t) i, tt) + 0.25f * valueNoise ((uint32_t) i + 7919u, tt * 2.3 + 11.0);
+                off = nz * depth * pc.hauntScale;
+            }
+        }
+        if (off != hOff[(size_t) i])
+        {
+            hOff[(size_t) i] = off;
+            hauntView[(size_t) i].store (off, std::memory_order_relaxed);
+        }
+    }
+}
+
 void Engine::process (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midi, juce::AudioPlayHead* ph)
 {
     juce::ScopedNoDenormals nd;
     const int n = buffer.getNumSamples();
     if (raw.empty()) { buffer.clear(); return; }
     if (bus.getNumSamples() < n) bus.setSize (8, n, false, true, true);
+    updateHaunt (n);
     updateShared();
 
     double beat0 = -1.0;

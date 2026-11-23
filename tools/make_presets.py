@@ -1479,6 +1479,77 @@ PLAN = [
     ]),
 ]
 
+# =========================================================================== name / sound agreement
+# Names are drawn at random per category, so an instrument word in a name can contradict the sound
+# ("Kingsbane Glockenspiel" was a marimba). This pass reads each preset's description and swaps any
+# instrument word that doesn't fit for one that does. It runs after build() and uses its own RNG,
+# so the sounds (and tools/levels.json) are untouched.
+NEEDS = {   # instrument word -> description keywords that justify it (any)
+    'Glockenspiel': ['bell', 'music box', 'plate'], 'Celesta': ['music box', 'bell'],
+    'Gamelan': ['bell', 'plate', 'vibes', 'gong', 'metallic'],
+    'Carillon': ['bell'], 'Bells': ['bell', 'music box', 'plate', 'vibes'], 'Belfry': ['bell'], 'Clocktower': ['bell', 'music box'],
+    'Chime': ['bell', 'music box', 'glass', 'vibes', 'plate', 'chime'],
+    'Music Box': ['music box'], 'Harmonium': ['organ'], 'Tines': ['tine', 'electric piano', 'music box', 'kalimba'],
+    'Keys': ['piano', 'organ', 'clavinet'], 'Hammers': ['piano', 'clavinet', 'mallet', 'marimba'], 'Ivory': ['piano', 'organ', 'clavinet'],
+    'Harp': ['harp', 'plucked string'], 'Lyre': ['harp', 'lute', 'zither', 'plucked string'], 'Lute': ['lute', 'zither', 'plucked string'],
+    'Zither': ['zither', 'lute'], 'Strings': ['string'], 'Bows': ['bow', 'string'],
+    'Horns': ['brass', 'horn'], 'Fanfare': ['brass', 'horn', 'fanfare'],
+    'Monks': ['monk'], 'Plainsong': ['monk', 'chant'], 'Chant': ['monk', 'chant', 'choir'],
+    'Choir': ['choir', 'monk'], 'Congregation': ['choir', 'monk'], 'Chorus': ['choir', 'monk', 'voices'], 'Vespers': ['choir', 'monk'],
+    'Hymn': ['choir', 'monk'], 'Psalm': ['choir', 'monk'], 'Canticle': ['choir', 'monk'], 'Requiem': ['choir', 'monk', 'ghost'],
+    'Litany': ['choir', 'monk', 'chant'], 'Sirens': ['siren'], 'Whispers': ['ghost', 'whisper', 'breath'],
+}
+PREFER = [  # first matching keyword in the description -> words that describe the sound
+    ('marimba', ['Marimba', 'Mallets', 'Hammers']), ('vibes', ['Vibes', 'Chime']), ('music box', ['Music Box', 'Celesta', 'Tines']),
+    ('electric piano', ['Tines', 'Keys', 'Ivory']), ('clavinet', ['Keys', 'Hammers']), ('organ', ['Harmonium', 'Keys', 'Organ']),
+    ('plate', ['Gamelan', 'Bells', 'Chime']), ('glass', ['Chime', 'Glass', 'Prism']), ('bell', ['Bells', 'Carillon', 'Belfry', 'Chime']),
+    ('zither', ['Zither', 'Lute', 'Lyre']), ('plucked string', ['Harp', 'Lyre', 'Lute', 'Strings']), ('kalimba', ['Kalimba', 'Tines', 'Droplet']),
+    ('monk', ['Monks', 'Chant', 'Plainsong']), ('siren', ['Sirens', 'Lament']), ('ghost', ['Whispers', 'Voices', 'Lament']),
+    ('choir', ['Choir', 'Chorus', 'Hymn', 'Vespers']), ('bow', ['Bows', 'Strings']), ('string ensemble', ['Strings', 'Ensemble', 'Section']),
+    ('horn', ['Horns', 'Fanfare']), ('brass', ['Horns', 'Fanfare', 'Brass']),
+]
+
+
+def word_ok(word, desc):
+    need = NEEDS.get(word)
+    return need is None or any(k in desc for k in need)
+
+
+def fix_names(presets):
+    rng = random.Random(4077)
+    taken = {p['name'] for p in presets}
+    renamed = {}
+    for p in presets:
+        name, desc = p['name'], p['desc'].lower()
+        nouns = NOUN[p['cat']] + [w for w in NEEDS if w not in NOUN[p['cat']]]
+        # the category noun sits at the start ("Harp of the Fen") or at the end ("Elder Harp")
+        hit = None
+        for w in sorted(nouns, key=len, reverse=True):
+            if name.endswith(' ' + w):
+                hit = ('end', w); break
+            if name.startswith(w + ' of '):
+                hit = ('start', w); break
+        if hit is None or word_ok(hit[1], desc):
+            continue
+        cands = []
+        for key, words in PREFER:
+            if key in desc:
+                cands = [w for w in words if word_ok(w, desc)]
+                break
+        if not cands:
+            cands = [w for w in NOUN[p['cat']] if w not in NEEDS]
+        rng.shuffle(cands)
+        for w in cands:
+            new = name[: -len(hit[1])] + w if hit[0] == 'end' else w + name[len(hit[1]):]
+            if new not in taken and len(new) <= 28:
+                taken.discard(name); taken.add(new)
+                renamed[name] = new
+                p['was'] = name
+                p['name'] = new
+                break
+    return renamed
+
+
 SPECIAL = {'Pads': 'Wyrmglass Cathedral'}   # a named showcase preset used for screenshots
 
 
@@ -1516,14 +1587,18 @@ def build():
 if __name__ == '__main__':
     presets = build()
     assert len(presets) == 500, len(presets)
+    renamed = fix_names(presets)
+    for old, new in renamed.items():
+        print(f'  renamed  {old:28s} -> {new}')
+    print(len(renamed), 'names changed to match their sound')
     names = [p['name'] for p in presets]
     assert len(set(names)) == len(names)
-    # apply the stored loudness normalisation (tools/levels.json, written by normalize_presets.py)
+    # apply the stored loudness normalisation (tools/levels.json, written by normalize_presets.py; keyed by the original names)
     lvpath = os.path.join(ROOT, 'tools', 'levels.json')
     if os.path.exists(lvpath) and '--raw' not in sys.argv:
         levels = json.load(open(lvpath))
         for pr in presets:
-            pr['p'].update(levels.get(pr['name'], {}))
+            pr['p'].update(levels.get(pr['name'], levels.get(pr.get('was', ''), {})))
     data = json.dumps(presets, separators=(',', ':')).encode()
     with gzip.open(os.path.join(ROOT, 'Resources', 'factory_presets.json.gz'), 'wb', compresslevel=9) as f:
         f.write(data)

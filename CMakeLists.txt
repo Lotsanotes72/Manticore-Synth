@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(Manticore VERSION 1.0.0 LANGUAGES C CXX)
+project(Manticore VERSION 1.1.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -30,6 +30,7 @@ juce_add_binary_data(ManticoreData SOURCES
 set(MC_SOURCES
     Source/Params.cpp
     Source/Presets.cpp
+    Source/Evolve.cpp
     Source/dsp/Wavetables.cpp
     Source/dsp/VoiceModules.cpp
     Source/dsp/Voice.cpp
@@ -43,7 +44,8 @@ set(MC_SOURCES
     Source/ui/SynthPage.cpp
     Source/ui/ModRack.cpp
     Source/ui/FxPage.cpp
-    Source/ui/Browser.cpp)
+    Source/ui/Browser.cpp
+    Source/ui/XyPage.cpp)
 
 set(MC_DEFS
     JUCE_WEB_BROWSER=0

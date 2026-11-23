@@ -263,8 +263,10 @@ void StepBar::mouseDoubleClick (const juce::MouseEvent&)
     repaint();
 }
 
-ArpPage::ArpPage (Ctx& c) : ctx (c)
+ArpPage::ArpPage (Ctx& c) : ctx (c),
+    arpLock (c.proc, kLockArp, "Arp", "keeps the arpeggiator pattern and settings as they are.")
 {
+    addAndMakeVisible (arpLock);
     auto& s = ctx.proc.apvts;
     on.attach (s, id::arpOn);
     hold.attach (s, id::arpHold);
@@ -337,6 +339,10 @@ void ArpPage::resized()
     topArea = r.removeFromTop (S (150));
     r.removeFromTop (S (8));
     gridArea = r;
+    {
+        auto t = topArea.reduced (S (12), S (8)).removeFromTop (S (18));
+        arpLock.setBounds (t.removeFromRight (arpLock.preferredWidth (s)));
+    }
     {
         auto a = topArea.reduced (S (12), S (8));
         a.removeFromTop (S (22));

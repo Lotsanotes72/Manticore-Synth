@@ -91,6 +91,7 @@ juce::StringArray sourceNames()
     for (int i = 1; i <= 4; ++i) s.add ("Math " + juce::String (i));
     s.addArray ({ "Velocity", "Key Follow", "Mod Wheel", "Aftertouch", "Pitch Bend", "Macro A", "Macro B", "Macro C", "Macro D",
                   "Random", "Gate", "Expression", "Alternate" });
+    for (int i = 1; i <= kNumXY; ++i) { s.add ("XY " + juce::String (i) + " X"); s.add ("XY " + juce::String (i) + " Y"); }
     jassert (s.size() == sNumSources);
     return s;
 }
@@ -98,7 +99,7 @@ juce::StringArray sourceNames()
 bool sourceIsGlobal (int s)
 {
     return (s >= sLfo1 && s < sLfo1 + 4) || s == sModWheel || s == sAftertouch || s == sPitchBend
-        || (s >= sMacroA && s <= sMacroD) || s == sExpression;
+        || (s >= sMacroA && s <= sMacroD) || s == sExpression || (s >= sXY1X && s < sXY1X + 2 * kNumXY);
 }
 
 // ------------------------------------------------------------------ ParamDef helpers
@@ -655,6 +656,32 @@ void globalParams (Builder& B)
         B.gf (id::arpStep (s, "vel"), S + "Velocity", "Vel", 0, 1, 0.8f, "%", "Step velocity.", -1e9f, false);
         B.gf (id::arpStep (s, "gate"), S + "Gate", "Gate", 0, 1, 0.8f, "%", "Step length. 100% ties into the next step (legato).", -1e9f, false);
     }
+
+    // XY vector mixer (appended last so older sessions keep their parameter order)
+    const char* axisName[] { "X", "Y" };
+    for (int n = 0; n < kNumXY; ++n)
+    {
+        const auto P = "XY " + juce::String (n + 1) + " ";
+        for (int a = 0; a < 2; ++a)
+            B.gf (id::xyPos (n, a), P + axisName[a], axisName[a], 0, 1, 0.5f, "%",
+                  juce::String ("Pad position on the ") + (a == 0 ? "horizontal" : "vertical") + " axis. The centre leaves the sound as stored; "
+                  "moving away pushes every target on this axis by up to its amount.", -1e9f, false).global = true;
+        for (int a = 0; a < 2; ++a)
+            for (int k = 0; k < kXYTargets; ++k)
+            {
+                const auto T = P + axisName[a] + " Target " + juce::String (k + 1) + " ";
+                B.gc (id::xyTarget (n, a, k, "dst"), T + "Param", "Target", { "None" }, 0, "Parameter moved by this axis of the pad.");
+                B.gf (id::xyTarget (n, a, k, "amt"), T + "Amount", "Amount", -1, 1, 0, "bp",
+                      "How far the target moves when the pad is at the edge (negative moves it the other way).");
+            }
+    }
+    // Haunt (performance settings: kept when presets change)
+    B.gb (id::hauntOn, "Haunt", "Haunt", false, "Haunt: every unlocked control drifts slowly around its setting, each at its own speed, so the sound "
+          "never quite repeats. Stored settings don't move; pale blue ghost pointers show where each control has wandered.");
+    B.gf (id::hauntDepth, "Haunt Depth", "Depth", 0, 1, 0.35f, "%", "How far Haunt lets each control wander.", -1e9f, false);
+    B.gf (id::hauntSpeed, "Haunt Speed", "Speed", 0, 1, 0.35f, "%", "How fast the controls wander.", -1e9f, false);
+    B.gb (id::hauntFollow, "Haunt Follow", "Follow", false, "Haunt Follow: links the drift to your playing. Dig in (or push the mod wheel) and it "
+          "wanders further; play softly and it settles home.");
 }
 
 Catalogue& cat()
@@ -681,7 +708,7 @@ Catalogue& cat()
                 dn.add (k.defs[(size_t) i].name);
             }
         for (auto& d : k.defs)
-            if (d.id.startsWith ("mtx") && d.id.endsWith ("_dst")) d.choices = dn;
+            if ((d.id.startsWith ("mtx") || d.id.startsWith ("xy")) && d.id.endsWith ("_dst")) d.choices = dn;
         for (int i = 0; i < (int) k.defs.size(); ++i) k.byId[k.defs[(size_t) i].id] = i;
         return k;
     }();
@@ -722,6 +749,11 @@ juce::String mtx (int n, const char* w) { return "mtx" + juce::String (n + 1) + 
 juce::String arpStep (int n, const char* w) { return "arp_s" + juce::String (n + 1) + "_" + w; }
 juce::String auxRet (int a) { return "aux" + juce::String (a + 1) + "_ret"; }
 juce::String macro (int m) { return juce::String ("macro_") + (char) ('a' + m); }
+juce::String xyPos (int n, int a) { return "xy" + juce::String (n + 1) + (a == 0 ? "_x" : "_y"); }
+juce::String xyTarget (int n, int a, int k, const char* w)
+{
+    return "xy" + juce::String (n + 1) + (a == 0 ? "_x" : "_y") + juce::String (k + 1) + "_" + w;
+}
 }
 
 const std::vector<GridEntry>& gridEntries()

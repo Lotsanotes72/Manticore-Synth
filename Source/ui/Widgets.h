@@ -21,7 +21,9 @@ public:
     void setAccent (juce::Colour c) { slider.getProperties().set ("accent", (juce::int64) c.getARGB()); repaint(); }
     void setBipolar (bool b) { slider.getProperties().set ("bipolar", b); }
     void setCaption (const juce::String& c) { caption = c; repaint(); }
-    void refreshModulation();           // re-read the matrix for this knob's target
+    void refreshModulation();           // re-read the matrix (and XY pads) for this knob's target
+    void setGhost (float normOffset);   // Haunt drift to show as a ghost pointer (0 = none)
+    int paramIndexCached() const { return pIndex; }
     void paint (juce::Graphics&) override;
     void resized() override;
     void mouseDown (const juce::MouseEvent&) override;
@@ -31,6 +33,8 @@ public:
 private:
     void showModMenu();
     juce::String caption;
+    int pIndex = -1;
+    float ghost = 0.0f;
     APVTS* apvts = nullptr;
     std::unique_ptr<APVTS::SliderAttachment> att;
 };

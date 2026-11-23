@@ -12,6 +12,20 @@ struct Ctx
     std::function<void (const juce::String&, int)> status;
 };
 
+// ------------------------------------------------------------------ padlock (Mutate / Breed / Haunt leave a locked section alone)
+class LockButton : public juce::Button
+{
+public:
+    LockButton (ManticoreProcessor& p, int bit, const juce::String& label, const juce::String& what);
+    void paintButton (juce::Graphics&, bool over, bool down) override;
+    void clicked() override;
+    int preferredWidth (float s) const;
+private:
+    ManticoreProcessor& proc;
+    int bit;
+    juce::String label;
+};
+
 // ------------------------------------------------------------------ generic module panel (data-driven)
 class ModuleEditor : public juce::Component
 {
@@ -36,6 +50,8 @@ private:
     ModuleDisplay display;
     MsegEditor mseg;
     MapEditor mapEd;
+    Action mutBtn { "MUTATE", col::amber, "Mutate this module only: a random variation of its settings at the toolbar's Strength. "
+                                           "Pitch stays protected and the level is matched. Padlocks don't apply here, since you picked the module." };
     juce::Rectangle<int> titleArea;
 };
 
@@ -70,6 +86,7 @@ private:
     bool fx;
     juce::OwnedArray<SlotTile> tiles;
     juce::OwnedArray<Choice> inputs;
+    juce::OwnedArray<LockButton> locks;      // grid: layout + lanes 1-4; fx: effects
     std::array<int, 16> lastEntries {};
 };
 
@@ -126,6 +143,7 @@ private:
     juce::OwnedArray<juce::TextButton> fams, nums;
     ModuleEditor editor;
     MatrixPanel matrix;
+    LockButton modLock, mtxLock;
     int current = 0, lastNum = 0;
 };
 
@@ -186,11 +204,48 @@ public:
 private:
     Ctx& ctx;
     Toggle on { "ARP ON", col::amber }, hold { "HOLD", col::teal };
+    LockButton arpLock;
     juce::OwnedArray<Choice> choices;
     juce::OwnedArray<Knob> knobs;
     juce::OwnedArray<Toggle> stepOn;
     juce::OwnedArray<StepBar> trBars, velBars, gateBars;
     juce::Rectangle<int> topArea, gridArea, rowLabels[4], helpArea;
+};
+
+// ------------------------------------------------------------------ XY vector mixer
+class XyPad : public juce::Component, public juce::SettableTooltipClient
+{
+public:
+    XyPad (Ctx&, int pad);
+    void paint (juce::Graphics&) override;
+    void mouseDown (const juce::MouseEvent&) override;
+    void mouseDrag (const juce::MouseEvent&) override;
+    void mouseUp (const juce::MouseEvent&) override;
+    void mouseDoubleClick (const juce::MouseEvent&) override;
+    void tick();
+private:
+    void setFrom (juce::Point<float>);
+    juce::Rectangle<float> padArea() const;
+    Ctx& ctx;
+    int pad;
+    juce::Point<float> last { -1, -1 }, lastGhost { -9, -9 };
+};
+
+class XyPage : public juce::Component
+{
+public:
+    explicit XyPage (Ctx&);
+    void paint (juce::Graphics&) override;
+    void resized() override;
+    void tick();
+private:
+    Ctx& ctx;
+    juce::OwnedArray<XyPad> pads;
+    juce::OwnedArray<DestPicker> dsts;
+    juce::OwnedArray<juce::Slider> amts;
+    std::vector<std::unique_ptr<APVTS::SliderAttachment>> amtAtt;
+    LockButton xyLock;
+    juce::Rectangle<int> headArea, padAreas[kNumXY];
 };
 
 // ------------------------------------------------------------------ preset browser
